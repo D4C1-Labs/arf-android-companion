@@ -1,8 +1,7 @@
 package com.flipper.psadecrypt.filemanager
 
+import android.app.AlertDialog
 import android.net.Uri
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.flipper.psadecrypt.applyBlurBehind
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -39,16 +38,22 @@ class FileManagerFragment : Fragment() {
     private val storageApi: FlipperStorageApi?
         get() = (activity as? MainActivity)?.storageApi
 
-    // SAF file picker for upload
-    private val uploadFilePicker = registerForActivityResult(
-        ActivityResultContracts.OpenDocument()
-    ) { uri -> uri?.let { handleUpload(it) } }
-
-    // SAF save picker for download
+    // SAF launchers — initialisés dans onCreate() pour éviter le crash sur Android 13+
+    private lateinit var uploadFilePicker: androidx.activity.result.ActivityResultLauncher<Array<String>>
     private var pendingDownloadFile: FlipperFile? = null
-    private val downloadSavePicker = registerForActivityResult(
-        ActivityResultContracts.CreateDocument("*/*")
-    ) { uri -> uri?.let { handleDownloadSave(it) } }
+    private lateinit var downloadSavePicker: androidx.activity.result.ActivityResultLauncher<String>
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // Enregistrement des launchers SAF ici — obligatoire avant onStart()
+        uploadFilePicker = registerForActivityResult(
+            ActivityResultContracts.OpenDocument()
+        ) { uri -> uri?.let { handleUpload(it) } }
+
+        downloadSavePicker = registerForActivityResult(
+            ActivityResultContracts.CreateDocument("*/*")
+        ) { uri -> uri?.let { handleDownloadSave(it) } }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_file_manager, container, false)
@@ -71,7 +76,7 @@ class FileManagerFragment : Fragment() {
                 }
             },
             onDownload = { file -> startDownload(file) },
-            onDelete = { file -> confirmDelete(file) }
+            onDelete = { file -> doDelete(file) }
         )
 
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -185,13 +190,12 @@ class FileManagerFragment : Fragment() {
 
         val flipperPath = "$currentPath/${file.name}"
 
-        val progressDialog = MaterialAlertDialogBuilder(requireContext())
+        val progressDialog = AlertDialog.Builder(requireContext())
             .setTitle("Downloading")
             .setMessage("${file.name}\n0 / ${formatSize(file.size)}")
             .setCancelable(false)
             .create()
         progressDialog.show()
-        progressDialog.applyBlurBehind()
 
         scope.launch {
             val tempFile = java.io.File(requireContext().cacheDir, "download_tmp_${System.currentTimeMillis()}")
@@ -233,6 +237,7 @@ class FileManagerFragment : Fragment() {
     }
 
     private fun handleUpload(uri: Uri) {
+        if (!isAdded) return
         val api = storageApi ?: return
         val ctx = requireContext()
 
@@ -245,13 +250,12 @@ class FileManagerFragment : Fragment() {
 
         val flipperPath = "$currentPath/$fileName"
 
-        val progressDialog = MaterialAlertDialogBuilder(ctx)
+        val progressDialog = AlertDialog.Builder(ctx)
             .setTitle("Uploading")
             .setMessage(fileName)
             .setCancelable(false)
             .create()
         progressDialog.show()
-        progressDialog.applyBlurBehind()
 
         scope.launch {
             val tempFile = java.io.File(ctx.cacheDir, "upload_tmp_${System.currentTimeMillis()}")
@@ -285,12 +289,12 @@ class FileManagerFragment : Fragment() {
     // --- Delete ---
 
     private fun confirmDelete(file: FlipperFile) {
-        MaterialAlertDialogBuilder(requireContext())
+        AlertDialog.Builder(requireContext())
             .setTitle("Delete")
             .setMessage("Delete ${if (file.isDirectory) "folder" else "file"} \"${file.name}\"?")
             .setPositiveButton("Delete") { _, _ -> doDelete(file) }
             .setNegativeButton("Cancel", null)
-            .show().applyBlurBehind()
+            .show()
     }
 
     private fun doDelete(file: FlipperFile) {
@@ -319,7 +323,7 @@ class FileManagerFragment : Fragment() {
             hint = "Folder name"
             setPadding(48, 24, 48, 24)
         }
-        MaterialAlertDialogBuilder(requireContext())
+        AlertDialog.Builder(requireContext())
             .setTitle("Create Folder")
             .setView(input)
             .setPositiveButton("Create") { _, _ ->
@@ -327,7 +331,7 @@ class FileManagerFragment : Fragment() {
                 if (name.isNotEmpty()) doMkdir(name)
             }
             .setNegativeButton("Cancel", null)
-            .show().applyBlurBehind()
+            .show()
     }
 
     private fun doMkdir(name: String) {

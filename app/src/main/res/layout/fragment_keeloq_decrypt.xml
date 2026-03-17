@@ -1,92 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorSurface">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:background="@color/dark_surface"
+    android:fillViewport="true">
 
-    <com.google.android.material.card.MaterialCardView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        app:cardBackgroundColor="?attr/colorSurfaceVariant"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="0dp"
-        app:strokeColor="?attr/colorOutline"
-        app:strokeWidth="1dp">
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Section label -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="KEELOQ BF PARAMETERS"
+            android:textSize="10sp"
+            android:letterSpacing="0.15"
+            android:textColor="@color/text_secondary"
+            android:fontFamily="monospace"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Input card -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="KeeLoq BF Parameters"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="?attr/colorOnSurface"
-                android:layout_marginBottom="2dp" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Magic Serial Type 1/2/3 brute force"
-                android:textSize="12sp"
-                android:textColor="?attr/colorOnSurfaceVariant"
-                android:layout_marginBottom="12dp" />
-            <EditText
-                android:id="@+id/kl_fix_input"
+            android:background="@drawable/card_bg"
+            android:padding="16dp"
+            android:layout_marginBottom="12dp">
+
+            <!-- Fix input -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Fix (e.g. 91234567)"
-                android:inputType="textCapCharacters"
-                android:fontFamily="monospace"
-                android:textSize="13sp"
-                android:textColor="?attr/colorOnSurface"
-                android:textColorHint="?attr/colorOutline"
-                android:backgroundTint="?attr/colorPrimary"
-                android:layout_marginBottom="8dp" />
+                android:orientation="vertical"
+                android:layout_marginBottom="12dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="FIX"
+                    android:textSize="9sp"
+                    android:letterSpacing="0.1"
+                    android:textColor="@color/text_secondary"
+                    android:fontFamily="monospace"
+                    android:layout_marginBottom="4dp" />
+                <EditText
+                    android:id="@+id/kl_fix_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:hint="91234567"
+                    android:inputType="textCapCharacters"
+                    android:fontFamily="monospace"
+                    android:textSize="13sp"
+                    android:textColor="@color/text_primary"
+                    android:textColorHint="@color/text_hint"
+                    android:backgroundTint="@color/accent"
+                    android:paddingHorizontal="0dp" />
+            </LinearLayout>
+
+            <!-- Hop1 / Hop2 row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="8dp">
-                <EditText
-                    android:id="@+id/kl_hop1_input"
+                android:layout_marginBottom="12dp">
+
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="Hop1 (msg 1)"
-                    android:inputType="textCapCharacters"
-                    android:fontFamily="monospace"
-                    android:textSize="13sp"
-                    android:textColor="?attr/colorOnSurface"
-                    android:textColorHint="?attr/colorOutline"
-                    android:backgroundTint="?attr/colorPrimary"
-                    android:layout_marginEnd="8dp" />
-                <EditText
-                    android:id="@+id/kl_hop2_input"
+                    android:orientation="vertical"
+                    android:layout_marginEnd="8dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="HOP 1"
+                        android:textSize="9sp"
+                        android:letterSpacing="0.1"
+                        android:textColor="@color/text_secondary"
+                        android:fontFamily="monospace"
+                        android:layout_marginBottom="4dp" />
+                    <EditText
+                        android:id="@+id/kl_hop1_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:hint="msg 1"
+                        android:inputType="textCapCharacters"
+                        android:fontFamily="monospace"
+                        android:textSize="13sp"
+                        android:textColor="@color/text_primary"
+                        android:textColorHint="@color/text_hint"
+                        android:backgroundTint="@color/accent"
+                        android:paddingHorizontal="0dp" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="Hop2 (msg 2)"
-                    android:inputType="textCapCharacters"
-                    android:fontFamily="monospace"
-                    android:textSize="13sp"
-                    android:textColor="?attr/colorOnSurface"
-                    android:textColorHint="?attr/colorOutline"
-                    android:backgroundTint="?attr/colorPrimary" />
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="HOP 2"
+                        android:textSize="9sp"
+                        android:letterSpacing="0.1"
+                        android:textColor="@color/text_secondary"
+                        android:fontFamily="monospace"
+                        android:layout_marginBottom="4dp" />
+                    <EditText
+                        android:id="@+id/kl_hop2_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:hint="msg 2"
+                        android:inputType="textCapCharacters"
+                        android:fontFamily="monospace"
+                        android:textSize="13sp"
+                        android:textColor="@color/text_primary"
+                        android:textColorHint="@color/text_hint"
+                        android:backgroundTint="@color/accent"
+                        android:paddingHorizontal="0dp" />
+                </LinearLayout>
             </LinearLayout>
+
+            <!-- Type spinner -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="LEARN TYPE"
+                android:textSize="9sp"
+                android:letterSpacing="0.1"
+                android:textColor="@color/text_secondary"
+                android:fontFamily="monospace"
+                android:layout_marginBottom="4dp" />
             <Spinner
                 android:id="@+id/kl_type_spinner"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp" />
+                android:layout_height="40dp"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Core spinner -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -96,16 +151,20 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Cores:"
-                    android:textSize="13sp"
-                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:text="CORES"
+                    android:textSize="9sp"
+                    android:letterSpacing="0.1"
+                    android:textColor="@color/text_secondary"
+                    android:fontFamily="monospace"
                     android:layout_marginEnd="8dp" />
                 <Spinner
                     android:id="@+id/kl_core_spinner"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:layout_weight="1" />
             </LinearLayout>
+
+            <!-- Action buttons -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -113,97 +172,123 @@
                 <Button
                     android:id="@+id/kl_run_button"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="38dp"
                     android:layout_weight="1"
-                    android:text="Run BF"
-                    android:textSize="12sp"
-                    android:layout_marginEnd="4dp" />
+                    android:text="RUN BF"
+                    android:textSize="11sp"
+                    android:layout_marginEnd="6dp"
+                    style="@style/DarkButton" />
                 <Button
                     android:id="@+id/kl_bench_button"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="38dp"
                     android:layout_weight="1"
-                    android:text="Benchmark"
-                    android:textSize="12sp" />
+                    android:text="⚡ BENCH"
+                    android:textSize="11sp"
+                    style="@style/DarkButton.Outline" />
             </LinearLayout>
         </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
 
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardBackgroundColor="?attr/colorSurfaceVariant"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="0dp"
-        app:strokeColor="?attr/colorOutline"
-        app:strokeWidth="1dp">
+        <!-- Status section label -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="STATUS"
+            android:textSize="10sp"
+            android:letterSpacing="0.15"
+            android:textColor="@color/text_secondary"
+            android:fontFamily="monospace"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Status card -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Status"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="?attr/colorOnSurface"
-                android:layout_marginBottom="8dp" />
+            android:background="@drawable/card_bg"
+            android:padding="16dp"
+            android:layout_marginBottom="12dp">
+
             <TextView
                 android:id="@+id/kl_status_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Ready"
-                android:textSize="14sp"
-                android:textColor="?attr/colorOnSurface"
-                android:layout_marginBottom="8dp" />
+                android:textSize="13sp"
+                android:textColor="@color/text_primary"
+                android:fontFamily="monospace"
+                android:layout_marginBottom="12dp" />
+
             <ProgressBar
                 android:id="@+id/kl_progress_bar"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="4dp"
                 android:max="100"
                 android:progress="0"
-                android:progressTint="?attr/colorPrimary"
-                android:progressBackgroundTint="?attr/colorOutline"
-                android:layout_marginBottom="4dp" />
-            <TextView
-                android:id="@+id/kl_progress_text"
+                android:progressTint="@color/accent"
+                android:progressBackgroundTint="@color/dark_divider"
+                android:layout_marginBottom="8dp" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="13sp"
-                android:textColor="?attr/colorOnSurfaceVariant"
-                android:fontFamily="monospace" />
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/kl_progress_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="11sp"
+                    android:textColor="@color/text_secondary"
+                    android:fontFamily="monospace" />
+                <TextView
+                    android:id="@+id/kl_speed_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="11sp"
+                    android:textColor="@color/accent"
+                    android:fontFamily="monospace" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Result card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/card_bg_accent"
+            android:padding="16dp">
+
             <TextView
-                android:id="@+id/kl_speed_text"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="13sp"
-                android:textColor="?attr/colorOnSurfaceVariant"
+                android:text="RESULT"
+                android:textSize="9sp"
+                android:letterSpacing="0.15"
+                android:textColor="@color/accent"
                 android:fontFamily="monospace"
                 android:layout_marginBottom="8dp" />
+
             <TextView
                 android:id="@+id/kl_result_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="14sp"
+                android:text="—"
+                android:textSize="13sp"
                 android:fontFamily="monospace"
-                android:textColor="?attr/colorPrimary"
+                android:textColor="@color/green"
                 android:textIsSelectable="true" />
+
             <TextView
-                android:id="@+id/kl_disclaimer_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Speed varies due to CPU thermal throttling. An initial burst followed by a slowdown is normal."
-                android:textSize="11sp"
-                android:textColor="?attr/colorOutline"
+                android:text="Speed varies due to CPU thermal throttling."
+                android:textSize="10sp"
+                android:textColor="@color/text_hint"
+                android:fontFamily="monospace"
                 android:layout_marginTop="8dp" />
         </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
 
-</LinearLayout>
+    </LinearLayout>
 </ScrollView>

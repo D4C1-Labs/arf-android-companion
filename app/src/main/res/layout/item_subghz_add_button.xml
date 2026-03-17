@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/colorSurfaceVariant"
+    android:background="@color/dark_card"
     android:layout_marginBottom="4dp">
 
     <Button
@@ -13,6 +13,6 @@
         android:layout_marginVertical="4dp"
         android:text="+ Add"
         android:textSize="12sp"
-
- />
+        android:textColor="@color/accent"
+        style="@style/Widget.MaterialComponents.Button.TextButton" />
 </FrameLayout>

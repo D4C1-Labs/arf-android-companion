@@ -1,180 +1,241 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorSurface">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:background="@color/dark_surface"
+    android:fillViewport="true">
 
-    <com.google.android.material.card.MaterialCardView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        app:cardBackgroundColor="?attr/colorSurfaceVariant"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="0dp"
-        app:strokeColor="?attr/colorOutline"
-        app:strokeWidth="1dp">
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Section label -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="BRUTE-FORCE PARAMETERS"
+            android:textSize="10sp"
+            android:letterSpacing="0.15"
+            android:textColor="@color/text_secondary"
+            android:fontFamily="monospace"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Input card -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="BF Parameters"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="?attr/colorOnSurface"
-                android:layout_marginBottom="2dp" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hex values to brute-force"
-                android:textSize="12sp"
-                android:textColor="?attr/colorOnSurfaceVariant"
-                android:layout_marginBottom="12dp" />
+            android:background="@drawable/card_bg"
+            android:padding="16dp"
+            android:layout_marginBottom="12dp">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginBottom="12dp">
-                <EditText
-                    android:id="@+id/w0_input"
+
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="w0 (e.g. A1B2C3D4)"
-                    android:inputType="textCapCharacters"
-                    android:fontFamily="monospace"
-                    android:textSize="13sp"
-                    android:textColor="?attr/colorOnSurface"
-                    android:textColorHint="?attr/colorOutline"
-                    android:backgroundTint="?attr/colorPrimary"
-                    android:layout_marginEnd="8dp" />
-                <EditText
-                    android:id="@+id/w1_input"
+                    android:orientation="vertical"
+                    android:layout_marginEnd="8dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="W0"
+                        android:textSize="9sp"
+                        android:letterSpacing="0.1"
+                        android:textColor="@color/text_secondary"
+                        android:fontFamily="monospace"
+                        android:layout_marginBottom="4dp" />
+                    <EditText
+                        android:id="@+id/w0_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:hint="A1B2C3D4"
+                        android:inputType="textCapCharacters"
+                        android:fontFamily="monospace"
+                        android:textSize="13sp"
+                        android:textColor="@color/text_primary"
+                        android:textColorHint="@color/text_hint"
+                        android:backgroundTint="@color/accent"
+                        android:paddingHorizontal="0dp" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="w1 (e.g. E5F6A7B8)"
-                    android:inputType="textCapCharacters"
-                    android:fontFamily="monospace"
-                    android:textSize="13sp"
-                    android:textColor="?attr/colorOnSurface"
-                    android:textColorHint="?attr/colorOutline"
-                    android:backgroundTint="?attr/colorPrimary" />
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="W1"
+                        android:textSize="9sp"
+                        android:letterSpacing="0.1"
+                        android:textColor="@color/text_secondary"
+                        android:fontFamily="monospace"
+                        android:layout_marginBottom="4dp" />
+                    <EditText
+                        android:id="@+id/w1_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:hint="E5F6A7B8"
+                        android:inputType="textCapCharacters"
+                        android:fontFamily="monospace"
+                        android:textSize="13sp"
+                        android:textColor="@color/text_primary"
+                        android:textColorHint="@color/text_hint"
+                        android:backgroundTint="@color/accent"
+                        android:paddingHorizontal="0dp" />
+                </LinearLayout>
             </LinearLayout>
+
+            <!-- Action buttons row -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="8dp">
+                android:orientation="horizontal">
+
                 <Button
                     android:id="@+id/run_bf1_button"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="38dp"
                     android:layout_weight="1"
-                    android:text="Run BF1"
-                    android:textSize="12sp"
-                    android:layout_marginEnd="4dp" />
+                    android:text="BF1"
+                    android:textSize="11sp"
+                    android:layout_marginEnd="6dp"
+                    style="@style/DarkButton.Outline" />
+
                 <Button
                     android:id="@+id/run_bf2_button"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="38dp"
                     android:layout_weight="1"
-                    android:text="Run BF2"
-                    android:textSize="12sp"
-                    android:layout_marginEnd="4dp" />
+                    android:text="BF2"
+                    android:textSize="11sp"
+                    android:layout_marginEnd="6dp"
+                    style="@style/DarkButton.Outline" />
+
                 <Button
                     android:id="@+id/run_both_button"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="38dp"
                     android:layout_weight="1"
-                    android:text="Run Both"
-                    android:textSize="12sp" />
+                    android:text="BOTH"
+                    android:textSize="11sp"
+                    style="@style/DarkButton" />
             </LinearLayout>
-            <Button
-                android:id="@+id/test_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Benchmark"
-                android:textSize="12sp" />
         </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
 
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardBackgroundColor="?attr/colorSurfaceVariant"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="0dp"
-        app:strokeColor="?attr/colorOutline"
-        app:strokeWidth="1dp">
+        <!-- Benchmark -->
+        <Button
+            android:id="@+id/test_button"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="⚡  BENCHMARK"
+            android:textSize="11sp"
+            android:letterSpacing="0.08"
+            android:layout_marginBottom="16dp"
+            style="@style/DarkButton.Outline" />
+
+        <!-- Status section label -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="STATUS"
+            android:textSize="10sp"
+            android:letterSpacing="0.15"
+            android:textColor="@color/text_secondary"
+            android:fontFamily="monospace"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Status card -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Status"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="?attr/colorOnSurface"
-                android:layout_marginBottom="8dp" />
+            android:background="@drawable/card_bg"
+            android:padding="16dp"
+            android:layout_marginBottom="12dp">
+
             <TextView
                 android:id="@+id/status_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Ready"
                 android:textSize="14sp"
-                android:textColor="?attr/colorOnSurface"
-                android:layout_marginBottom="8dp" />
+                android:textColor="@color/text_primary"
+                android:fontFamily="monospace"
+                android:layout_marginBottom="12dp" />
+
             <ProgressBar
                 android:id="@+id/progress_bar"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="4dp"
                 android:max="100"
                 android:progress="0"
-                android:progressTint="?attr/colorPrimary"
-                android:progressBackgroundTint="?attr/colorOutline"
-                android:layout_marginBottom="4dp" />
-            <TextView
-                android:id="@+id/progress_text"
+                android:progressTint="@color/accent"
+                android:progressBackgroundTint="@color/dark_divider"
+                android:layout_marginBottom="8dp" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="13sp"
-                android:textColor="?attr/colorOnSurfaceVariant"
-                android:fontFamily="monospace" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/progress_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="11sp"
+                    android:textColor="@color/text_secondary"
+                    android:fontFamily="monospace" />
+
+                <TextView
+                    android:id="@+id/speed_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="11sp"
+                    android:textColor="@color/accent"
+                    android:fontFamily="monospace" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Result card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/card_bg_accent"
+            android:padding="16dp">
+
             <TextView
-                android:id="@+id/speed_text"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="13sp"
-                android:textColor="?attr/colorOnSurfaceVariant"
+                android:text="RESULT"
+                android:textSize="9sp"
+                android:letterSpacing="0.15"
+                android:textColor="@color/accent"
                 android:fontFamily="monospace"
                 android:layout_marginBottom="8dp" />
+
             <TextView
                 android:id="@+id/result_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text=""
+                android:text="—"
                 android:textSize="14sp"
                 android:fontFamily="monospace"
-                android:textColor="?attr/colorPrimary"
+                android:textColor="@color/green"
                 android:textIsSelectable="true" />
         </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
 
-</LinearLayout>
+    </LinearLayout>
 </ScrollView>

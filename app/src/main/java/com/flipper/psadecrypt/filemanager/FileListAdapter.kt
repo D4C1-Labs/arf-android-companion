@@ -1,11 +1,9 @@
 package com.flipper.psadecrypt.filemanager
 
+import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -27,10 +25,9 @@ class FileListAdapter(
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val icon: ImageView = view.findViewById(R.id.img_icon)
-        val name: TextView = view.findViewById(R.id.txt_name)
-        val size: TextView = view.findViewById(R.id.txt_size)
-        val moreBtn: ImageButton = view.findViewById(R.id.btn_more)
+        val icon: TextView = view.findViewById(R.id.txt_file_icon)
+        val name: TextView = view.findViewById(R.id.txt_file_name)
+        val size: TextView = view.findViewById(R.id.txt_file_size)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -45,30 +42,30 @@ class FileListAdapter(
         holder.name.text = file.name
 
         if (file.isDirectory) {
-            holder.icon.setImageResource(android.R.drawable.ic_menu_agenda)
+            holder.icon.text = "📁"
             holder.size.visibility = View.GONE
         } else {
-            holder.icon.setImageResource(android.R.drawable.ic_menu_save)
+            holder.icon.text = "📄"
             holder.size.text = formatSize(file.size)
             holder.size.visibility = View.VISIBLE
         }
 
+        // Tap normal — naviguer dans dossier ou ouvrir
         holder.itemView.setOnClickListener { onItemClick(file) }
 
-        holder.moreBtn.setOnClickListener { view ->
-            val popup = PopupMenu(view.context, view)
-            if (!file.isDirectory) {
-                popup.menu.add(0, 1, 0, "Download")
-            }
-            popup.menu.add(0, 2, 1, "Delete")
-            popup.setOnMenuItemClickListener { item ->
-                when (item.itemId) {
-                    1 -> { onDownload(file); true }
-                    2 -> { onDelete(file); true }
-                    else -> false
-                }
-            }
-            popup.show()
+        // Long press — menu Delete avec confirmation
+        holder.itemView.setOnLongClickListener {
+            val ctx = holder.itemView.context
+            val type = if (file.isDirectory) "folder" else "file"
+
+            AlertDialog.Builder(ctx)
+                .setTitle("Delete $type")
+                .setMessage("Delete \"${file.name}\" ?")
+                .setPositiveButton("Delete") { _, _ -> onDelete(file) }
+                .setNegativeButton("Cancel", null)
+                .show()
+
+            true
         }
     }
 

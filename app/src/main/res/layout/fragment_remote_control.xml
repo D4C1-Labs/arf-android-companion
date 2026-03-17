@@ -3,114 +3,146 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="?attr/colorSurface"
-    android:gravity="center_horizontal">
+    android:background="@color/dark_surface">
 
-    <!-- Not connected overlay -->
+    <!-- Not connected -->
     <TextView
         android:id="@+id/txt_not_connected"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="Connect to Flipper via BLE first"
-        android:textSize="14sp"
-        android:textColor="?attr/colorOnSurfaceVariant"
+        android:textSize="13sp"
+        android:textColor="@color/text_secondary"
+        android:fontFamily="monospace"
         android:gravity="center"
         android:visibility="gone" />
 
-    <!-- Flipper screen display -->
-    <FrameLayout
+    <!-- Écran Flipper — ratio 2:1 forcé par aspect ratio -->
+    <LinearLayout
         android:id="@+id/screen_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:orientation="vertical"
         android:gravity="center"
         android:padding="16dp">
 
-        <ImageView
-            android:id="@+id/img_screen"
+        <!-- Label au dessus -->
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:scaleType="fitCenter"
-            android:background="#FFFF8C29"
-            android:contentDescription="Flipper screen" />
-    </FrameLayout>
+            android:layout_height="wrap_content"
+            android:text="FLIPPER SCREEN"
+            android:textSize="9sp"
+            android:letterSpacing="0.15"
+            android:textColor="@color/text_secondary"
+            android:fontFamily="monospace"
+            android:layout_marginBottom="6dp" />
 
-    <!-- D-pad controls -->
+        <!-- Bordure extérieure style bezel Flipper -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/card_bg"
+            android:padding="6dp">
+
+            <!-- Fond vert Flipper avec ImageView ratio 2:1 -->
+            <ImageView
+                android:id="@+id/img_screen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                android:background="#FF1C2B00"
+                android:minHeight="100dp"
+                android:contentDescription="Flipper screen" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- D-pad — fond séparé, design propre -->
     <LinearLayout
         android:id="@+id/controls_container"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center_horizontal"
-        android:paddingBottom="24dp">
+        android:background="@color/dark_card"
+        android:paddingTop="14dp"
+        android:paddingBottom="18dp">
 
         <!-- UP -->
         <Button
             android:id="@+id/btn_up"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:text="\u25B2"
-            android:textSize="24sp"
-            android:textColor="?attr/colorOnSurface"
-            android:backgroundTint="?attr/colorSurfaceVariant" />
+            android:layout_width="54dp"
+            android:layout_height="46dp"
+            android:text="▲"
+            android:textSize="18sp"
+            android:textColor="@color/text_primary"
+            android:backgroundTint="@color/dark_surface"
+            style="@style/Widget.MaterialComponents.Button" />
 
         <!-- LEFT / OK / RIGHT -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:layout_marginVertical="3dp">
 
             <Button
                 android:id="@+id/btn_left"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:text="\u25C0"
-                android:textSize="24sp"
-                android:textColor="?attr/colorOnSurface"
-                android:backgroundTint="?attr/colorSurfaceVariant" />
+                android:layout_width="46dp"
+                android:layout_height="46dp"
+                android:text="◀"
+                android:textSize="16sp"
+                android:textColor="@color/text_primary"
+                android:backgroundTint="@color/dark_surface"
+                style="@style/Widget.MaterialComponents.Button" />
 
+            <!-- Bouton OK — accent rouge, rond -->
             <Button
                 android:id="@+id/btn_ok"
-                android:layout_width="72dp"
-                android:layout_height="72dp"
-                android:layout_marginHorizontal="4dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginHorizontal="8dp"
                 android:text="OK"
-                android:textSize="16sp"
-                android:textColor="?attr/colorOnSurface"
-                android:backgroundTint="?attr/colorPrimary" />
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                style="@style/DarkButton" />
 
             <Button
                 android:id="@+id/btn_right"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:text="\u25B6"
-                android:textSize="24sp"
-                android:textColor="?attr/colorOnSurface"
-                android:backgroundTint="?attr/colorSurfaceVariant" />
+                android:layout_width="46dp"
+                android:layout_height="46dp"
+                android:text="▶"
+                android:textSize="16sp"
+                android:textColor="@color/text_primary"
+                android:backgroundTint="@color/dark_surface"
+                style="@style/Widget.MaterialComponents.Button" />
         </LinearLayout>
 
         <!-- DOWN -->
         <Button
             android:id="@+id/btn_down"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:text="\u25BC"
-            android:textSize="24sp"
-            android:textColor="?attr/colorOnSurface"
-            android:backgroundTint="?attr/colorSurfaceVariant" />
+            android:layout_width="54dp"
+            android:layout_height="46dp"
+            android:text="▼"
+            android:textSize="18sp"
+            android:textColor="@color/text_primary"
+            android:backgroundTint="@color/dark_surface"
+            style="@style/Widget.MaterialComponents.Button" />
 
-        <!-- BACK -->
+        <!-- BACK — séparé visuellement -->
         <Button
             android:id="@+id/btn_back"
-            android:layout_width="120dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="12dp"
+            android:layout_width="100dp"
+            android:layout_height="36dp"
+            android:layout_marginTop="10dp"
             android:text="BACK"
-            android:textSize="14sp"
-            android:textColor="?attr/colorOnSurface"
-            android:backgroundTint="?attr/colorSurfaceVariant" />
+            android:textSize="11sp"
+            style="@style/DarkButton.Outline" />
+
     </LinearLayout>
 
 </LinearLayout>

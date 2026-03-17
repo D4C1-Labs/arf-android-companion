@@ -4,13 +4,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.flipper.psadecrypt.applyBlurBehind
 import android.widget.ImageButton
+import android.widget.PopupMenu
 import android.widget.Switch
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.flipper.psadecrypt.R
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 sealed class SettingsItem {
     data class SectionHeader(val title: String, val isCollapsed: Boolean, val childCount: Int) : SettingsItem()
@@ -188,30 +188,42 @@ class SubGhzSettingsAdapter(
     }
 
     inner class FrequencyVH(view: View) : RecyclerView.ViewHolder(view) {
-        private val freqText: TextView = view.findViewById(R.id.txt_frequency)
-        private val defaultBadge: TextView = view.findViewById(R.id.txt_default_badge)
-        private val deleteBtn: ImageButton = view.findViewById(R.id.btn_delete)
+        private val label: TextView = view.findViewById(R.id.txt_freq_label)
+        private val value: TextView = view.findViewById(R.id.txt_freq_value)
+        private val switch: SwitchMaterial = view.findViewById(R.id.switch_freq)
         fun bind(item: SettingsItem.FrequencyItem) {
-            freqText.text = SubGhzSettingsParser.formatFrequency(item.hz)
-            defaultBadge.visibility = if (item.isDefault) View.VISIBLE else View.GONE
-            deleteBtn.setOnClickListener {
-                if (item.isHopper) onDeleteHopperFrequency(item.hz)
-                else onDeleteFrequency(item.hz)
-            }
+            label.text = SubGhzSettingsParser.formatFrequency(item.hz)
+            value.text = if (item.isHopper) "Hopper Frequency" else "Static Frequency"
+            switch.isChecked = item.isDefault
+            
             itemView.setOnLongClickListener {
                 if (!item.isHopper) {
-                    val options = if (item.isDefault)
-                        arrayOf("Unset as default")
-                    else
-                        arrayOf("Set as default")
-                    MaterialAlertDialogBuilder(it.context)
-                        .setItems(options) { _, which ->
-                            when {
-                                item.isDefault && which == 0 -> onSetDefaultFrequency(null)
-                                !item.isDefault && which == 0 -> onSetDefaultFrequency(item.hz)
-                            }
+                    val popup = PopupMenu(it.context, it)
+                    popup.menu.add(0, 1, 0, "Delete")
+                    if (item.isDefault) {
+                        popup.menu.add(0, 2, 0, "Unset as default")
+                    } else {
+                        popup.menu.add(0, 3, 0, "Set as default")
+                    }
+                    popup.setOnMenuItemClickListener { menuItem ->
+                        when (menuItem.itemId) {
+                            1 -> { onDeleteFrequency(item.hz); true }
+                            2 -> { onSetDefaultFrequency(null); true }
+                            3 -> { onSetDefaultFrequency(item.hz); true }
+                            else -> false
                         }
-                        .show().applyBlurBehind()
+                    }
+                    popup.show()
+                } else {
+                    val popup = PopupMenu(it.context, it)
+                    popup.menu.add(0, 1, 0, "Delete")
+                    popup.setOnMenuItemClickListener { menuItem ->
+                        when (menuItem.itemId) {
+                            1 -> { onDeleteHopperFrequency(item.hz); true }
+                            else -> false
+                        }
+                    }
+                    popup.show()
                 }
                 true
             }
@@ -226,14 +238,17 @@ class SubGhzSettingsAdapter(
             nameText.text = item.preset.name
             moduleText.text = item.preset.module
             moreBtn.setOnClickListener { view ->
-                MaterialAlertDialogBuilder(view.context)
-                    .setItems(arrayOf("Edit", "Delete")) { _, which ->
-                        when (which) {
-                            0 -> onEditPreset(item.index)
-                            1 -> onDeletePreset(item.index)
-                        }
+                val popup = PopupMenu(view.context, view)
+                popup.menu.add(0, 1, 0, "Edit")
+                popup.menu.add(0, 2, 1, "Delete")
+                popup.setOnMenuItemClickListener { menuItem ->
+                    when (menuItem.itemId) {
+                        1 -> { onEditPreset(item.index); true }
+                        2 -> { onDeletePreset(item.index); true }
+                        else -> false
                     }
-                          .show().applyBlurBehind()
+                }
+                popup.show()
             }
         }
     }
@@ -246,11 +261,15 @@ class SubGhzSettingsAdapter(
             nameText.text = item.name
             moduleText.text = "Modulation"
             moreBtn.setOnClickListener { view ->
-                MaterialAlertDialogBuilder(view.context)
-                    .setItems(arrayOf("Delete")) { _, _ ->
-                        onDeleteHoppingPreset(item.index)
+                val popup = PopupMenu(view.context, view)
+                popup.menu.add(0, 1, 0, "Delete")
+                popup.setOnMenuItemClickListener { menuItem ->
+                    when (menuItem.itemId) {
+                        1 -> { onDeleteHoppingPreset(item.index); true }
+                        else -> false
                     }
-                      .show().applyBlurBehind()
+                }
+                popup.show()
             }
         }
     }

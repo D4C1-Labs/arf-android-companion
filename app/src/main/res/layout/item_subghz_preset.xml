@@ -5,12 +5,12 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:gravity="center_vertical"
-    android:background="?attr/colorSurfaceVariant">
+    android:background="@color/dark_card">
 
     <View
         android:layout_width="2dp"
         android:layout_height="match_parent"
-        android:background="?attr/colorPrimary" />
+        android:background="@color/accent" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:text="FM95"
             android:textSize="14sp"
-            android:textColor="?attr/colorOnSurface" />
+            android:textColor="@color/text_primary" />
 
         <TextView
             android:id="@+id/txt_preset_module"
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:text="CC1101"
             android:textSize="11sp"
-            android:textColor="?attr/colorOnSurfaceVariant" />
+            android:textColor="@color/text_secondary" />
     </LinearLayout>
 
     <ImageButton
@@ -45,5 +45,5 @@
         android:src="@android:drawable/ic_menu_more"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="More options"
-        app:tint="?attr/colorOnSurfaceVariant" />
+        app:tint="@color/text_secondary" />
 </LinearLayout>

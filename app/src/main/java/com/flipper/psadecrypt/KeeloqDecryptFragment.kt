@@ -48,18 +48,18 @@ class KeeloqDecryptFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        statusText = view.findViewById(R.id.kl_status_text)
+        statusText   = view.findViewById(R.id.kl_status_text)
         progressText = view.findViewById(R.id.kl_progress_text)
-        speedText = view.findViewById(R.id.kl_speed_text)
-        resultText = view.findViewById(R.id.kl_result_text)
-        runButton = view.findViewById(R.id.kl_run_button)
-        benchButton = view.findViewById(R.id.kl_bench_button)
-        progressBar = view.findViewById(R.id.kl_progress_bar)
-        fixInput = view.findViewById(R.id.kl_fix_input)
-        hop1Input = view.findViewById(R.id.kl_hop1_input)
-        hop2Input = view.findViewById(R.id.kl_hop2_input)
-        typeSpinner = view.findViewById(R.id.kl_type_spinner)
-        coreSpinner = view.findViewById(R.id.kl_core_spinner)
+        speedText    = view.findViewById(R.id.kl_speed_text)
+        resultText   = view.findViewById(R.id.kl_result_text)
+        runButton    = view.findViewById(R.id.kl_run_button)
+        benchButton  = view.findViewById(R.id.kl_bench_button)
+        progressBar  = view.findViewById(R.id.kl_progress_bar)
+        fixInput     = view.findViewById(R.id.kl_fix_input)
+        hop1Input    = view.findViewById(R.id.kl_hop1_input)
+        hop2Input    = view.findViewById(R.id.kl_hop2_input)
+        typeSpinner  = view.findViewById(R.id.kl_type_spinner)
+        coreSpinner  = view.findViewById(R.id.kl_core_spinner)
 
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, LEARN_TYPES)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -106,7 +106,7 @@ class KeeloqDecryptFragment : Fragment() {
     }
 
     private fun runManualBf() {
-        val fix = parseHex(fixInput.text.toString())
+        val fix  = parseHex(fixInput.text.toString())
         val hop1 = parseHex(hop1Input.text.toString())
         val hop2 = parseHex(hop2Input.text.toString())
         if (fix == null || hop1 == null || hop2 == null) {
@@ -117,7 +117,7 @@ class KeeloqDecryptFragment : Fragment() {
         val typeIdx = typeSpinner.selectedItemPosition
         val learnType = LEARN_TYPE_VALUES[typeIdx]
 
-        mainActivity?.appendLog("KL manual BF: fix=0x${Integer.toHexString(fix).uppercase()} hop1=0x${Integer.toHexString(hop1).uppercase()} hop2=0x${Integer.toHexString(hop2).uppercase()} type=$learnType")
+        mainActivity?.appendLog("KL BF: fix=0x${Integer.toHexString(fix).uppercase()} hop1=0x${Integer.toHexString(hop1).uppercase()} type=$learnType")
         setButtonsEnabled(false)
 
         if (learnType == 0) {
@@ -136,7 +136,7 @@ class KeeloqDecryptFragment : Fragment() {
             val totalStart = System.currentTimeMillis()
 
             for (type in intArrayOf(6, 7, 8)) {
-                handler.post { statusText.text = "Trying Type $type (2^32)..." }
+                handler.post { statusText.text = "Trying Type $type (2^32)…" }
 
                 val executor = KeeloqBfExecutor(cores)
                 bfExecutor = executor
@@ -158,7 +158,9 @@ class KeeloqDecryptFragment : Fragment() {
             mainActivity?.sendBleData(KeeloqBleProtocol.encodeBfComplete(candidates.size, totalElapsed))
 
             handler.post {
-                showCandidateResults(totalElapsed)
+                statusText.text = "Not found in Types 6, 7, 8"
+                resultText.text = "—"
+                progressBar.progress = 100
                 setButtonsEnabled(true)
             }
             bfExecutor = null
@@ -167,8 +169,9 @@ class KeeloqDecryptFragment : Fragment() {
 
     private fun runSingleType(learnType: Int, serial: Int, fix: Int, hop1: Int, hop2: Int) {
         val cores = selectedCoreCount()
-        statusText.text = "Running Type $learnType on $cores cores..."
+        statusText.text = "Running Type $learnType on $cores cores…"
         progressBar.progress = 0
+        resultText.text = "—"
         resultText.text = ""
         lastCandidateCount = 0
         candidates.clear()
@@ -245,13 +248,13 @@ class KeeloqDecryptFragment : Fragment() {
             return
         }
         val request = KeeloqBleProtocol.parseKlBfRequest(data) ?: return
-        mainActivity?.appendLog("KL BF request: type=${request.learningType} fix=0x${Integer.toHexString(request.fix).uppercase()} hop=0x${Integer.toHexString(request.hop1).uppercase()}")
+        mainActivity?.appendLog("KL BF request: type=${request.learningType} fix=0x${Integer.toHexString(request.fix).uppercase()}")
 
         fixInput.setText(Integer.toHexString(request.fix).uppercase())
         hop1Input.setText(Integer.toHexString(request.hop1).uppercase())
         hop2Input.setText(if (request.hop2 != 0) Integer.toHexString(request.hop2).uppercase() else Integer.toHexString(request.hop1).uppercase())
 
-        val learnType = if (request.learningType == 0) 0 else request.learningType
+        val learnType = request.learningType
         setButtonsEnabled(false)
 
         if (learnType == 0) {
@@ -270,10 +273,25 @@ class KeeloqDecryptFragment : Fragment() {
         }
     }
 
+    private fun showResult(result: KlBfResult) {
+        if (result.found) {
+            val mfHex = String.format("%016X", result.mfkey)
+            val dkHex = String.format("%016X", result.devkey)
+            statusText.text = "FOUND (Type ${result.learnType}) — ${result.elapsedMs}ms"
+            resultText.text = "MfKey:   $mfHex\nDevKey:  $dkHex\nCounter: 0x${String.format("%04X", result.cnt)}\nType:    ${result.learnType}\nTime:    ${result.elapsedMs}ms"
+            mainActivity?.appendLog("KL FOUND! mfkey=$mfHex devkey=$dkHex cnt=${result.cnt}")
+        } else {
+            statusText.text = "Not found — ${result.elapsedMs}ms"
+            resultText.text = "—"
+        }
+        progressBar.progress = 100
+        context?.let { BleKeepAliveService.clearBfProgress(it) }
+    }
+
     private fun runBenchmark() {
-        statusText.text = "Benchmarking KeeLoq (1M keys)..."
+        statusText.text = "Benchmarking KeeLoq (1M keys)…"
         progressBar.progress = 0
-        resultText.text = ""
+        resultText.text = "—"
         setButtonsEnabled(false)
 
         val executor = KeeloqBfExecutor(selectedCoreCount())
@@ -289,13 +307,10 @@ class KeeloqDecryptFragment : Fragment() {
             val keysPerSec = 0x100000L * 1000 / elapsedClamped
 
             handler.post {
-                val cores = Runtime.getRuntime().availableProcessors()
                 statusText.text = "Bench: ${formatCount(keysPerSec)} keys/sec (${elapsed}ms)"
                 progressBar.progress = 100
                 val etaType67 = TOTAL_32BIT / keysPerSec.coerceAtLeast(1)
-                resultText.text = "$cores cores, ${String.format("%,d", keysPerSec)} keys/sec\n" +
-                    "Type 6/7 (2^32) ETA: ${etaType67}s\n" +
-                    "Type 8 (2^40) ETA: ${etaType67 * 256}s (~${etaType67 * 256 / 3600}h)"
+                resultText.text = "${Runtime.getRuntime().availableProcessors()} cores\n${String.format("%,d", keysPerSec)} keys/sec\nType 6/7 ETA: ${etaType67}s\nType 8 ETA: ${etaType67 * 256}s (~${etaType67 * 256 / 3600}h)"
                 setButtonsEnabled(true)
             }
             bfExecutor = null
@@ -312,8 +327,7 @@ class KeeloqDecryptFragment : Fragment() {
 
                 progressBar.progress = pct
                 progressText.text = "$pct% — ${formatCount(tested)} / ${formatCount(totalKeys)}"
-                val kpsStr = "${formatCount(kps)} keys/sec"
-                speedText.text = kpsStr
+                speedText.text = "${formatCount(kps)} k/s"
 
                 val count = executor.getCandidateCount()
                 if (count > lastCandidateCount) {
@@ -328,7 +342,7 @@ class KeeloqDecryptFragment : Fragment() {
                 }
 
                 mainActivity?.sendBleData(KeeloqBleProtocol.encodeProgress(0, (tested and 0xFFFFFFFFL).toInt(), kps.toInt()))
-                context?.let { BleKeepAliveService.updateBfProgress(it, pct, "${formatCount(kps)}") }
+                context?.let { BleKeepAliveService.updateBfProgress(it, pct, formatCount(kps)) }
                 handler.postDelayed(this, 500)
             }
         }
@@ -346,9 +360,9 @@ class KeeloqDecryptFragment : Fragment() {
     private fun formatCount(n: Long): String {
         return when {
             n >= 1_000_000_000 -> "${n / 1_000_000_000}.${(n % 1_000_000_000) / 100_000_000}G"
-            n >= 1_000_000 -> "${n / 1_000_000}.${(n % 1_000_000) / 100_000}M"
-            n >= 1_000 -> "${n / 1_000}K"
-            else -> "$n"
+            n >= 1_000_000     -> "${n / 1_000_000}.${(n % 1_000_000) / 100_000}M"
+            n >= 1_000         -> "${n / 1_000}K"
+            else               -> "$n"
         }
     }
 

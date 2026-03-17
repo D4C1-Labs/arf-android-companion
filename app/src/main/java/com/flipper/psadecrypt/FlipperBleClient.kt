@@ -52,8 +52,6 @@ class FlipperBleClient(private val context: Context) {
 
     var listener: Listener? = null
     var rpcListener: RpcListener? = null
-    val lastConnectedAddress: String?
-        get() = gatt?.device?.address
 
     private var gatt: BluetoothGatt? = null
     private var customRxChar: BluetoothGattCharacteristic? = null // fe65

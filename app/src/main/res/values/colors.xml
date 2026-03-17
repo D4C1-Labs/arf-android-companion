@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#FF000000</color>
-    <color name="dark_surface">#FF121212</color>
-    <color name="dark_card">#FF1E1E1E</color>
-    <color name="dark_divider">#FF333333</color>
-    <color name="accent">#FFFF6F00</color>
-    <color name="text_primary">#FFEEEEEE</color>
-    <color name="text_secondary">#FFB0B0B0</color>
-    <color name="green">#FF4CAF50</color>
-    <color name="log_bg">#FF0A0A0A</color>
-    <color name="log_text">#FFAAAAAA</color>
-    <color name="primary_container">#FF3D1F00</color>
-    <color name="on_primary_container">#FFFFBD7A</color>
-    <color name="drawer_bg">#801E1E1E</color>
-    <color name="dialog_blur_bg">#CC1A1A2E</color>
-    <color name="nav_indicator_static">#4DFF6F00</color>
+    <color name="dark_surface">#FF08080C</color>
+    <color name="dark_card">#FF12121A</color>
+    <color name="dark_card2">#FF1A1A24</color>
+    <color name="dark_divider">#FF252530</color>
+    <color name="accent">#FFC0202A</color>
+    <color name="accent_light">#FFE03545</color>
+    <color name="accent_dim">#33C0202A</color>
+    <color name="text_primary">#FFE8E8F2</color>
+    <color name="text_secondary">#FF7878A0</color>
+    <color name="text_hint">#FF404058</color>
+    <color name="green">#FF22D46A</color>
+    <color name="green_dim">#2222D46A</color>
+    <color name="log_bg">#FF04040A</color>
+    <color name="log_text">#FF445566</color>
+    <color name="nav_bg">#FF0E0E18</color>
+    <color name="white">#FFFFFFFF</color>
 </resources>

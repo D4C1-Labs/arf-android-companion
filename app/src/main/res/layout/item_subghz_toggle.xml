@@ -4,12 +4,12 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:gravity="center_vertical"
-    android:background="?attr/colorSurfaceVariant">
+    android:background="@color/dark_card">
 
     <View
         android:layout_width="2dp"
         android:layout_height="match_parent"
-        android:background="?attr/colorPrimary" />
+        android:background="@color/accent" />
 
     <TextView
         android:id="@+id/txt_toggle_label"
@@ -18,7 +18,7 @@
         android:layout_weight="1"
         android:text="Add standard frequencies"
         android:textSize="14sp"
-        android:textColor="?attr/colorOnSurface"
+        android:textColor="@color/text_primary"
         android:paddingStart="14dp"
         android:paddingVertical="12dp" />
 
@@ -27,6 +27,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:thumbTint="?attr/colorPrimary"
-        android:trackTint="?attr/colorOnSurfaceVariant" />
+        android:thumbTint="@color/accent"
+        android:trackTint="@color/text_secondary" />
 </LinearLayout>

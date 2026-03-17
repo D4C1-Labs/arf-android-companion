@@ -4,26 +4,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="?attr/colorSurface">
+    android:background="@color/dark_surface">
 
     <!-- Top bar -->
     <LinearLayout
         android:id="@+id/top_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="44dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:paddingHorizontal="8dp"
-        android:paddingVertical="6dp"
-        android:background="?attr/colorSurfaceVariant">
+        android:background="@color/dark_card">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="/ext/subghz/assets/setting_user"
-            android:textSize="12sp"
-            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textSize="11sp"
+            android:textColor="@color/text_secondary"
             android:fontFamily="monospace"
             android:paddingStart="8dp"
             android:singleLine="true"
@@ -36,7 +35,7 @@
             android:src="@android:drawable/ic_popup_sync"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Refresh"
-            app:tint="?attr/colorOnSurfaceVariant" />
+            app:tint="@color/text_secondary" />
 
         <ImageButton
             android:id="@+id/btn_save"
@@ -45,26 +44,22 @@
             android:src="@android:drawable/ic_menu_save"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Save"
-            app:tint="?attr/colorPrimary" />
+            app:tint="@color/accent" />
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?attr/colorOutline" />
+    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/dark_divider" />
 
-    <!-- Not connected overlay -->
     <TextView
         android:id="@+id/txt_not_connected"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="Connect to Flipper via BLE first"
-        android:textSize="14sp"
-        android:textColor="?attr/colorOnSurfaceVariant"
+        android:textSize="13sp"
+        android:textColor="@color/text_secondary"
+        android:fontFamily="monospace"
         android:gravity="center"
         android:visibility="gone" />
 
-    <!-- Loading indicator -->
     <ProgressBar
         android:id="@+id/progress_loading"
         android:layout_width="wrap_content"
@@ -73,25 +68,23 @@
         android:visibility="gone"
         android:layout_marginTop="48dp" />
 
-    <!-- Error text -->
     <TextView
         android:id="@+id/txt_error"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text=""
-        android:textSize="13sp"
-        android:textColor="#FFE57373"
+        android:textSize="12sp"
+        android:textColor="@color/accent"
+        android:fontFamily="monospace"
         android:gravity="center"
         android:padding="16dp"
         android:visibility="gone" />
 
-    <!-- Settings list -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_settings"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:clipToPadding="false"
-        android:paddingBottom="16dp" />
+        android:paddingVertical="8dp" />
 
 </LinearLayout>

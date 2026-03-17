@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/about_button"
+    android:layout_width="30dp"
+    android:layout_height="30dp"
+    android:text="!"
+    android:textSize="14sp"
+    android:textStyle="bold"
+    android:textColor="@color/accent"
+    android:fontFamily="monospace"
+    android:gravity="center"
+    android:background="@drawable/btn_circle"
+    android:clickable="true"
+    android:focusable="true" />

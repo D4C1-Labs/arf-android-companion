@@ -1,37 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_psa_decrypt"
-            android:icon="@drawable/ic_nav_decrypt"
+            android:icon="@android:drawable/ic_lock_lock"
             android:title="PSA Decrypt" />
         <item
             android:id="@+id/nav_keeloq_decrypt"
-            android:icon="@drawable/ic_nav_keeloq"
+            android:icon="@android:drawable/ic_menu_search"
             android:title="KeeLoq Decrypt" />
         <item
             android:id="@+id/nav_file_manager"
-            android:icon="@drawable/ic_nav_files"
+            android:icon="@android:drawable/ic_menu_agenda"
             android:title="File Manager" />
         <item
             android:id="@+id/nav_subghz_settings"
-            android:icon="@drawable/ic_nav_subghz"
-            android:title="SubGhz Settings" />
+            android:icon="@android:drawable/ic_menu_manage"
+            android:title="SubGHz Settings" />
         <item
             android:id="@+id/nav_remote_control"
-            android:icon="@drawable/ic_nav_remote"
+            android:icon="@android:drawable/ic_menu_view"
             android:title="Remote Control" />
     </group>
+
     <item android:title="Other">
         <menu>
             <item
-                android:id="@+id/nav_theme_toggle"
-                android:icon="@drawable/ic_nav_theme"
-                android:title="Toggle Dynamic Color" />
-            <item
                 android:id="@+id/nav_about"
-                android:icon="@drawable/ic_nav_about"
+                android:icon="@android:drawable/ic_dialog_info"
                 android:title="About" />
         </menu>
     </item>
+
 </menu>

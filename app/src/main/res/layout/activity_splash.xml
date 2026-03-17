@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black">
+
+    <!-- Ligne rouge horizontale animée (scan line) -->
+    <View
+        android:id="@+id/splash_scan_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/accent"
+        android:alpha="0"
+        android:layout_gravity="center_vertical" />
+
+    <!-- Contenu centré -->
+    <LinearLayout
+        android:id="@+id/splash_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:alpha="0">
+
+        <!-- Logo avec halo rouge derrière -->
+        <FrameLayout
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginBottom="28dp">
+
+            <!-- Halo rouge -->
+            <View
+                android:id="@+id/splash_halo"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@drawable/splash_halo"
+                android:layout_gravity="center"
+                android:scaleX="0.4"
+                android:scaleY="0.4"
+                android:alpha="0" />
+
+            <!-- Logo -->
+            <ImageView
+                android:id="@+id/splash_logo"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@mipmap/ic_launcher_foreground"
+                android:scaleType="fitCenter"
+                android:layout_gravity="center"
+                android:scaleX="0"
+                android:scaleY="0" />
+        </FrameLayout>
+
+        <!-- ARF -->
+        <TextView
+            android:id="@+id/splash_title_arf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ARF"
+            android:textSize="48sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.3"
+            android:textColor="@color/accent"
+            android:fontFamily="monospace"
+            android:alpha="0"
+            android:translationY="30dp" />
+
+        <!-- COMPANION -->
+        <TextView
+            android:id="@+id/splash_title_companion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="COMPANION"
+            android:textSize="16sp"
+            android:letterSpacing="0.5"
+            android:textColor="@color/text_secondary"
+            android:fontFamily="monospace"
+            android:alpha="0"
+            android:translationY="20dp"
+            android:layout_marginTop="2dp" />
+
+        <!-- Ligne décorative rouge -->
+        <View
+            android:id="@+id/splash_line"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/accent"
+            android:layout_marginTop="16dp"
+            android:alpha="0.7" />
+
+        <!-- Tagline -->
+        <TextView
+            android:id="@+id/splash_tagline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="FLIPPER ZERO RF TOOLKIT"
+            android:textSize="9sp"
+            android:letterSpacing="0.2"
+            android:textColor="@color/text_hint"
+            android:fontFamily="monospace"
+            android:alpha="0"
+            android:layout_marginTop="10dp" />
+
+    </LinearLayout>
+
+    <!-- Version en bas -->
+    <TextView
+        android:id="@+id/splash_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="32dp"
+        android:text="v1.0"
+        android:textSize="10sp"
+        android:textColor="@color/text_hint"
+        android:fontFamily="monospace"
+        android:alpha="0" />
+
+</FrameLayout>

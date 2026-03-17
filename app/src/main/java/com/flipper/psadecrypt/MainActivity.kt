@@ -1,12 +1,13 @@
 package com.flipper.psadecrypt
 
 import android.Manifest
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.bluetooth.*
 import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -14,24 +15,17 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.GravityCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import com.flipper.psadecrypt.filemanager.FileManagerFragment
 import com.flipper.psadecrypt.remotecontrol.RemoteControlFragment
 import com.flipper.psadecrypt.subghz.SubGhzSettingsFragment
 import com.flipper.psadecrypt.rpc.FlipperRpcClient
 import com.flipper.psadecrypt.storage.FlipperStorageApi
-import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.navigation.NavigationView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -46,32 +40,28 @@ class MainActivity : AppCompatActivity(), FlipperBleClient.Listener {
         private set
     private val handler = Handler(Looper.getMainLooper())
 
-    // RPC client & storage API (initialized on BLE connect if RPC chars available)
     var rpcClient: FlipperRpcClient? = null
-        private set
     var storageApi: FlipperStorageApi? = null
-        private set
     private var rpcScope: CoroutineScope? = null
 
-    // UI — main
-    private lateinit var drawerLayout: DrawerLayout
-    private lateinit var navView: NavigationView
+    // UI
+    private lateinit var bottomNav: BottomNavigationView
     private lateinit var bleStatusText: TextView
     private lateinit var bleButton: Button
-    private lateinit var deviceSpinner: Spinner
-    private lateinit var logToggle: TextView
+    private lateinit var logToggle: View
     private lateinit var logScroll: ScrollView
     private lateinit var logText: TextView
+    private lateinit var logToggleArrow: TextView
+    private lateinit var bleDot: View
 
-    // BLE scan
     private val foundDevices = mutableListOf<BluetoothDevice>()
     private val deviceNames = mutableListOf<String>()
     private lateinit var deviceAdapter: ArrayAdapter<String>
 
     private var logExpanded = false
     private val timeFmt = SimpleDateFormat("HH:mm:ss.SSS", Locale.US)
+    private var logLineCount = 0
 
-    // Current fragment
     private var psaFragment: PsaDecryptFragment? = null
     private var keeloqFragment: KeeloqDecryptFragment? = null
     private var fileManagerFragment: FileManagerFragment? = null
@@ -80,115 +70,54 @@ class MainActivity : AppCompatActivity(), FlipperBleClient.Listener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-        val prefs = getSharedPreferences("settings", MODE_PRIVATE)
-        if (!prefs.getBoolean("dynamic_color", true)) {
-            setTheme(R.style.AppTheme_Static)
-        }
         setContentView(R.layout.activity_main)
-        val blurView = findViewById<eightbitlab.com.blurview.BlurView>(R.id.blur_view)
-        val blurTarget = findViewById<eightbitlab.com.blurview.BlurTarget>(R.id.blur_target)
-        blurView.setupWith(blurTarget).setBlurRadius(20f)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.toolbar)) { view, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            val params = view.layoutParams as ViewGroup.MarginLayoutParams
-            params.topMargin = systemBars.top
-            view.layoutParams = params
-            insets
-        }
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.log_toggle)) { view, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.setPadding(12, 0, 12, systemBars.bottom + 8)
-            insets
-        }
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.nav_view)) { view, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.setPadding(0, systemBars.top, 0, systemBars.bottom)
-            insets
-        }
 
-        // Toolbar
-        val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
-
-        // Drawer
-        drawerLayout = findViewById(R.id.drawer_layout)
-        navView = findViewById(R.id.nav_view)
-
-        val toggle = ActionBarDrawerToggle(
-            this, drawerLayout, toolbar,
-            R.string.nav_open, R.string.nav_close
-        )
-        drawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
-
-        navView.setNavigationItemSelectedListener { item ->
+        // Bottom nav — 5 items max
+        bottomNav = findViewById(R.id.bottom_nav)
+        bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_psa_decrypt -> showPsaDecrypt()
-                R.id.nav_keeloq_decrypt -> showKeeloqDecrypt()
-                R.id.nav_file_manager -> showFileManager()
-                R.id.nav_remote_control -> showRemoteControl()
-                R.id.nav_subghz_settings -> showSubGhzSettings()
-                R.id.nav_about -> showAbout()
-                R.id.nav_theme_toggle -> {
-                    val p = getSharedPreferences("settings", MODE_PRIVATE)
-                    p.edit().putBoolean("dynamic_color", !p.getBoolean("dynamic_color", true)).apply()
-                    drawerLayout.closeDrawer(GravityCompat.START)
-                    drawerLayout.postDelayed({
-                        val intent = packageManager.getLaunchIntentForPackage(packageName)!!
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-                        startActivity(intent)
-                        kotlin.system.exitProcess(0)
-                    }, 300)
-                }
+                R.id.nav_psa_decrypt     -> { showFragment("psa"); true }
+                R.id.nav_keeloq_decrypt  -> { showFragment("keeloq"); true }
+                R.id.nav_file_manager    -> { showFragment("files"); true }
+                R.id.nav_subghz_settings -> { showFragment("subghz"); true }
+                R.id.nav_remote_control  -> { showFragment("remote"); true }
+                else -> false
             }
-            drawerLayout.closeDrawer(GravityCompat.START)
-            true
         }
 
-        // BLE status bar
+        // About button in header
+        findViewById<View>(R.id.about_button)?.setOnClickListener {
+            showFragment("about")
+            bottomNav.selectedItemId = -1
+        }
+
+        // BLE
         bleStatusText = findViewById(R.id.ble_status_text)
         bleButton = findViewById(R.id.ble_button)
-        deviceSpinner = findViewById(R.id.device_spinner)
+        bleDot = findViewById(R.id.ble_dot)
 
         deviceAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, deviceNames)
         deviceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        deviceSpinner.adapter = deviceAdapter
 
         bleButton.setOnClickListener { requestPermissionsAndScan() }
 
-        // Shared log
+        // Log
         logToggle = findViewById(R.id.log_toggle)
+        logToggleArrow = findViewById(R.id.log_toggle_arrow)
         logScroll = findViewById(R.id.log_scroll)
         logText = findViewById(R.id.log_text)
+        logToggle.setOnClickListener { toggleLog() }
 
-        logToggle.setOnClickListener {
-            logExpanded = !logExpanded
-            logScroll.visibility = if (logExpanded) View.VISIBLE else View.GONE
-            logToggle.text = if (logExpanded) "▼ Log" else "▶ Log"
-        }
-
-        // BLE client
         bleClient = FlipperBleClient(this)
         bleClient.listener = this
 
-        // Auto-reconnect to last device
-        val lastAddress = getSharedPreferences("settings", MODE_PRIVATE)
-            .getString("last_device", null)
-        if (lastAddress != null) {
-            val btManager = getSystemService(BLUETOOTH_SERVICE) as android.bluetooth.BluetoothManager
-            val device = btManager.adapter?.bondedDevices?.find { it.address == lastAddress }
-            if (device != null) {
-                appendLog("Auto-connecting to last device: ${device.name}")
-                bleStatusText.text = "Auto-connecting..."
-                bleClient.connect(device)
-            }
-        }
+        // Animate header on start
+        animateHeaderIn()
 
         // Default fragment
         if (savedInstanceState == null) {
-            showPsaDecrypt()
-            navView.setCheckedItem(R.id.nav_psa_decrypt)
+            showFragment("psa")
+            bottomNav.selectedItemId = R.id.nav_psa_decrypt
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -252,82 +181,77 @@ class MainActivity : AppCompatActivity(), FlipperBleClient.Listener {
         supportActionBar?.title = "Remote Control"
     }
 
-    private fun showSubGhzSettings() {
-        clearFragmentRefs()
-        val frag = SubGhzSettingsFragment()
-        subGhzSettingsFragment = frag
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, frag)
-            .commit()
-        supportActionBar?.title = "SubGhz Settings"
+    private fun animateHeaderIn() {
+        val header = findViewById<View>(R.id.header_bar) ?: return
+        header.alpha = 0f
+        header.animate().alpha(1f).setDuration(300).start()
     }
 
-    private fun showAbout() {
-        clearFragmentRefs()
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, AboutFragment())
-            .commit()
-        supportActionBar?.title = "About"
-    }
-
-    // --- RPC lifecycle ---
-
-    private fun startRpcClient() {
-        if (!bleClient.isRpcAvailable) {
-            appendLog("RPC characteristics not available, file manager won't work")
-            return
+    private fun showFragment(tag: String) {
+        val ft = supportFragmentManager.beginTransaction()
+        ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+        when (tag) {
+            "psa" -> {
+                if (psaFragment == null) psaFragment = PsaDecryptFragment()
+                ft.replace(R.id.fragment_container, psaFragment!!, tag)
+            }
+            "keeloq" -> {
+                if (keeloqFragment == null) keeloqFragment = KeeloqDecryptFragment()
+                ft.replace(R.id.fragment_container, keeloqFragment!!, tag)
+            }
+            "files" -> {
+                if (fileManagerFragment == null) fileManagerFragment = FileManagerFragment()
+                ft.replace(R.id.fragment_container, fileManagerFragment!!, tag)
+            }
+            "subghz" -> {
+                if (subGhzSettingsFragment == null) subGhzSettingsFragment = SubGhzSettingsFragment()
+                ft.replace(R.id.fragment_container, subGhzSettingsFragment!!, tag)
+            }
+            "remote" -> {
+                if (remoteControlFragment == null) remoteControlFragment = RemoteControlFragment()
+                ft.replace(R.id.fragment_container, remoteControlFragment!!, tag)
+            }
+            "about" -> {
+                ft.replace(R.id.fragment_container, AboutFragment(), tag)
+            }
         }
-        val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
-        val client = FlipperRpcClient(bleClient, scope)
-        client.start()
-        rpcClient = client
-        rpcScope = scope
-        storageApi = FlipperStorageApi(client)
-        appendLog("RPC client started (MTU=${bleClient.negotiatedMtu}, buffer=${bleClient.rpcBufferRemaining})")
-
-        // Notify active fragments
-        fileManagerFragment?.onConnectionChanged(true)
-        remoteControlFragment?.onConnectionChanged(true)
-        subGhzSettingsFragment?.onConnectionChanged(true)
+        ft.commit()
     }
 
-    private fun stopRpcClient() {
-        rpcClient?.stop()
-        rpcClient = null
-        storageApi = null
-        rpcScope?.cancel()
-        rpcScope = null
-        appendLog("RPC client stopped")
-
-        // Notify active fragments
-        fileManagerFragment?.onConnectionChanged(false)
-        remoteControlFragment?.onConnectionChanged(false)
-        subGhzSettingsFragment?.onConnectionChanged(false)
+    private fun toggleLog() {
+        logExpanded = !logExpanded
+        if (logExpanded) {
+            logScroll.visibility = View.VISIBLE
+            logScroll.alpha = 0f
+            logScroll.animate().alpha(1f).setDuration(200).start()
+            logToggleArrow.text = "▼"
+        } else {
+            logScroll.animate().alpha(0f).setDuration(150).withEndAction {
+                logScroll.visibility = View.GONE
+            }.start()
+            logToggleArrow.text = "▶"
+        }
     }
-
-    // --- Shared log ---
 
     fun appendLog(msg: String) {
         val ts = timeFmt.format(Date())
-        val line = "[$ts] $msg\n"
-        Log.d(TAG, msg)
         runOnUiThread {
-            logText.append(line)
-            logScroll.post { logScroll.fullScroll(View.FOCUS_DOWN) }
+            logLineCount++
+            val current = logText.text.toString()
+            val newText = if (current.isEmpty()) "[$ts] $msg" else "$current\n[$ts] $msg"
+            logText.text = newText
+            findViewById<TextView>(R.id.log_count)?.text = "$logLineCount lines"
+            handler.post { logScroll.fullScroll(View.FOCUS_DOWN) }
         }
     }
 
-    // --- BLE data bridge ---
-
-    fun sendBleData(data: ByteArray): Boolean {
-        if (!bleClient.isConnected) return false
-        return bleClient.send(data)
-    }
-
-    // --- BLE Permissions ---
+    // --- BLE Scan ---
 
     private val permLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
+    ) { perms ->
+        if (perms.values.all { it }) startBleScan()
+        else appendLog("BLE permissions denied")
     ) { results ->
         appendLog("Permission results: $results")
         val bleGranted = results.filterKeys { it != Manifest.permission.POST_NOTIFICATIONS }.values.all { it }
@@ -345,169 +269,144 @@ class MainActivity : AppCompatActivity(), FlipperBleClient.Listener {
     }
 
     private fun requestPermissionsAndScan() {
-        val perms = mutableListOf<String>()
+        val needed = mutableListOf<String>()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            perms.add(Manifest.permission.BLUETOOTH_SCAN)
-            perms.add(Manifest.permission.BLUETOOTH_CONNECT)
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED)
+                needed.add(Manifest.permission.BLUETOOTH_SCAN)
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED)
+                needed.add(Manifest.permission.BLUETOOTH_CONNECT)
         } else {
-            perms.add(Manifest.permission.ACCESS_FINE_LOCATION)
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+                needed.add(Manifest.permission.ACCESS_FINE_LOCATION)
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+                needed.add(Manifest.permission.ACCESS_COARSE_LOCATION)
         }
+        if (needed.isEmpty()) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+                val lm = getSystemService(LOCATION_SERVICE) as android.location.LocationManager
+                val locationEnabled = lm.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER)
+                    || lm.isProviderEnabled(android.location.LocationManager.NETWORK_PROVIDER)
+                if (!locationEnabled) {
+                    appendLog("ERREUR: Activez la localisation pour scanner BLE")
+                    bleStatusText.text = "Activez la localisation !"
+                    return
+                }
+            }
+            startBleScan()
+        } else {
+            permLauncher.launch(needed.toTypedArray())
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             perms.add(Manifest.permission.POST_NOTIFICATIONS)
         }
         val needed = perms.filter {
             ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
         }
-        appendLog("Permissions needed: $needed")
-        if (needed.isEmpty()) startBleScan()
-        else permLauncher.launch(needed.toTypedArray())
     }
 
-    // --- BLE Scanning ---
-
     private fun startBleScan() {
-        val btManager = getSystemService(BLUETOOTH_SERVICE) as BluetoothManager
-        val adapter = btManager.adapter
-        if (adapter == null || !adapter.isEnabled) {
-            bleStatusText.text = "Bluetooth not available"
-            appendLog("Bluetooth adapter null or disabled")
-            return
-        }
-
-        foundDevices.clear()
-        deviceNames.clear()
-        deviceAdapter.notifyDataSetChanged()
-
-        val bonded = adapter.bondedDevices ?: emptySet()
-        appendLog("Bonded devices: ${bonded.size}")
-        for (device in bonded) {
-            val name = device.name ?: "unknown"
-            appendLog("  Bonded: $name (${device.address})")
-            if (name.startsWith("Flipper")) {
-                foundDevices.add(device)
-                deviceNames.add("$name (${device.address}) [bonded]")
-            }
-        }
-        deviceAdapter.notifyDataSetChanged()
-        deviceSpinner.visibility = View.VISIBLE
-
-        bleStatusText.text = "Scanning... (${foundDevices.size} bonded)"
-        appendLog("Starting BLE scan...")
-
-        val scanner = adapter.bluetoothLeScanner
-        if (scanner == null) {
-            bleStatusText.text = "BLE scanner not available"
-            appendLog("bluetoothLeScanner is null")
-            return
-        }
+        val btMgr = getSystemService(BLUETOOTH_SERVICE) as BluetoothManager
+        val adapter = btMgr.adapter ?: run { appendLog("No BT adapter"); return }
+        foundDevices.clear(); deviceNames.clear(); deviceAdapter.notifyDataSetChanged()
+        bleStatusText.text = "Scanning…"
+        bleButton.text = "STOP"
+        bleButton.setOnClickListener { adapter.bluetoothLeScanner?.stopScan(scanCallback) }
 
         val settings = ScanSettings.Builder()
-            .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
-            .build()
-
-        try {
-            scanner.startScan(null, settings, scanCallback)
-        } catch (e: Exception) {
-            appendLog("startScan failed: ${e.message}")
-            bleStatusText.text = "Scan failed: ${e.message}"
-            return
-        }
+            .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY).build()
+        adapter.bluetoothLeScanner?.startScan(null, settings, scanCallback)
+        appendLog("BLE scan started")
 
         handler.postDelayed({
-            try {
-                scanner.stopScan(scanCallback)
-            } catch (e: Exception) {
-                appendLog("stopScan failed: ${e.message}")
-            }
-            appendLog("Scan complete, ${foundDevices.size} device(s) found")
+            adapter.bluetoothLeScanner?.stopScan(scanCallback)
             if (foundDevices.isNotEmpty()) {
-                bleStatusText.text = "Found ${foundDevices.size} device(s)"
-                bleButton.text = "Connect"
+                bleStatusText.text = "${foundDevices.size} device(s) found"
+                bleButton.text = "CONNECT"
                 bleButton.setOnClickListener { connectToSelected() }
             } else {
-                bleStatusText.text = "No Flipper found"
+                bleStatusText.text = "No device found"
+                bleButton.text = "SCAN"
+                bleButton.setOnClickListener { requestPermissionsAndScan() }
             }
-        }, 1500)
+        }, 4000)
     }
 
     private val scanCallback = object : ScanCallback() {
         override fun onScanResult(callbackType: Int, result: ScanResult) {
             val device = result.device
-            val name = device.name
-            val addr = device.address
-
-            if (name != null) {
-                appendLog("Scan: $name ($addr) rssi=${result.rssi}")
-            }
-
-            if (name != null && name.startsWith("Flipper") && !foundDevices.any { it.address == addr }) {
+            val name = device.name ?: return
+            if (name.startsWith("Flipper") && !foundDevices.any { it.address == device.address }) {
                 foundDevices.add(device)
-                deviceNames.add("$name ($addr)")
-                runOnUiThread {
-                    deviceAdapter.notifyDataSetChanged()
-                    bleStatusText.text = "Found ${foundDevices.size} device(s), scanning..."
-                }
+                deviceNames.add("$name (${device.address})")
+                runOnUiThread { deviceAdapter.notifyDataSetChanged() }
+                appendLog("Found: $name (${device.address}) rssi=${result.rssi}")
             }
         }
-
         override fun onScanFailed(errorCode: Int) {
-            appendLog("Scan failed with error code: $errorCode")
-            runOnUiThread { bleStatusText.text = "Scan failed (error $errorCode)" }
+            appendLog("Scan failed: $errorCode")
+            runOnUiThread { bleStatusText.text = "Scan failed ($errorCode)" }
         }
     }
 
     private fun connectToSelected() {
-        val idx = deviceSpinner.selectedItemPosition
-        if (idx < 0 || idx >= foundDevices.size) {
-            bleStatusText.text = "No device selected"
-            return
-        }
-        val device = foundDevices[idx]
-        appendLog("Connecting to ${device.name} (${device.address})...")
-        bleStatusText.text = "Connecting..."
+        if (foundDevices.isEmpty()) { bleStatusText.text = "No device"; return }
+        val device = foundDevices[0]
+        appendLog("Connecting to ${device.name}…")
+        bleStatusText.text = "Connecting…"
         bleClient.connect(device)
     }
 
     // --- FlipperBleClient.Listener ---
 
-    override fun onLog(msg: String) {
-        appendLog("[BLE] $msg")
-    }
+    override fun onLog(msg: String) { appendLog("[BLE] $msg") }
 
     override fun onConnected() {
-        getSharedPreferences("settings", MODE_PRIVATE).edit()
-            .putString("last_device", bleClient.lastConnectedAddress).apply()
         appendLog("Connected to Flipper")
-        bleStatusText.text = "Connected"
-        bleButton.text = "Disconnect"
-        bleButton.setOnClickListener { bleClient.disconnect() }
-        deviceSpinner.visibility = View.GONE
+        runOnUiThread {
+            bleStatusText.text = "Connected"
+            bleButton.text = "DISC."
+            bleButton.setOnClickListener { bleClient.disconnect() }
+            bleDot.setBackgroundResource(R.drawable.dot_connected)
+            val scaleX = ObjectAnimator.ofFloat(bleDot, "scaleX", 1f, 1.4f, 1f)
+            val scaleY = ObjectAnimator.ofFloat(bleDot, "scaleY", 1f, 1.4f, 1f)
+            AnimatorSet().apply {
+                playTogether(scaleX, scaleY)
+                duration = 400
+                interpolator = AccelerateDecelerateInterpolator()
+                start()
+            }
+        }
         BleKeepAliveService.start(this)
-
-        // Start RPC client for file manager
         startRpcClient()
+        fileManagerFragment?.onConnectionChanged(true)
+        remoteControlFragment?.onConnectionChanged(true)
+        subGhzSettingsFragment?.onConnectionChanged(true)
     }
 
     override fun onDisconnected() {
-        appendLog("Disconnected from Flipper")
-        bleStatusText.text = "Disconnected"
+        appendLog("Disconnected")
+        runOnUiThread {
+            bleStatusText.text = "No BLE"
+            bleButton.text = "SCAN"
+            bleButton.setOnClickListener { requestPermissionsAndScan() }
+            bleDot.setBackgroundResource(R.drawable.dot_disconnected)
+        }
         psaFragment?.bfExecutor?.cancel()
         keeloqFragment?.bfExecutor?.cancel()
-        bleButton.text = "Scan BLE"
-        bleButton.setOnClickListener { requestPermissionsAndScan() }
-        deviceSpinner.visibility = View.GONE
         BleKeepAliveService.stop(this)
-
-        // Stop RPC client
         stopRpcClient()
+        fileManagerFragment?.onConnectionChanged(false)
+        remoteControlFragment?.onConnectionChanged(false)
+        subGhzSettingsFragment?.onConnectionChanged(false)
     }
 
     override fun onDataReceived(data: ByteArray) {
-        appendLog("BLE data received: ${data.size} bytes, type=0x${String.format("%02X", data[0])}")
+        appendLog("BLE data: ${data.size}B type=0x${String.format("%02X", data[0])}")
         if (KeeloqBleProtocol.isKeeloqMessage(data)) {
             if (keeloqFragment == null) {
-                showKeeloqDecrypt()
-                navView.setCheckedItem(R.id.nav_keeloq_decrypt)
+                runOnUiThread {
+                    showFragment("keeloq")
+                    bottomNav.selectedItemId = R.id.nav_keeloq_decrypt
+                }
             }
             handler.postDelayed({ keeloqFragment?.handleBleData(data) }, 100)
         } else {
@@ -515,15 +414,25 @@ class MainActivity : AppCompatActivity(), FlipperBleClient.Listener {
         }
     }
 
-    // --- Lifecycle ---
+    private fun startRpcClient() {
+        val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+        rpcScope = scope
+        val rpc = FlipperRpcClient(bleClient, scope)
+        rpcClient = rpc
+        rpc.start()
+        storageApi = FlipperStorageApi(rpc)
+        appendLog("RPC client started")
+    }
 
-    @Deprecated("Use onBackPressedDispatcher")
-    override fun onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
-        }
+    private fun stopRpcClient() {
+        rpcScope?.cancel()
+        rpcScope = null
+        rpcClient = null
+        storageApi = null
+    }
+
+    fun sendBleData(data: ByteArray) {
+        bleClient.send(data)
     }
 
     override fun onDestroy() {

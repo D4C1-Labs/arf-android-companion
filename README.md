@@ -14,24 +14,13 @@ Offloads PSA TEA key brute-force from the Flipper to your phone. Uses native C (
 - Local benchmark mode
 - Can be triggered from Flipper or manually from the app
 
-### SubGhz Settings Manager
-Edit the Flipper's SubGhz user settings (`setting_user`) directly from the app.
-
-- Add/remove custom frequencies and hopper frequencies
-- Set default frequency
-- Toggle standard frequency inclusion
-- Create and edit CC1101 custom presets with a structured register editor (address/value pairs + PA table)
-- Paste hex register data from clipboard
-- Configure hopping presets (modulation presets used during frequency hopping)
-- Collapsible sections with card-style UI
-
 ### File Manager
-Browse, upload, download, and manage files on the Flipper's SD card over BLE. Stock flipper feature.
+Browse, upload, download, and manage files on the Flipper's SD card over BLE. Stock flipper feature. 
 
 - Directory listing and navigation
 - File upload (pick from phone storage) /broken/
 - File download (save to phone)
-- Create and delete folders/files
+- Create and delete folders/files 
 
 ## Building
 

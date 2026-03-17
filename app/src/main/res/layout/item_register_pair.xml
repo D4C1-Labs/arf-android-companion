@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:text="0x"
         android:textSize="12sp"
-        android:textColor="?attr/colorOnSurfaceVariant"
+        android:textColor="@color/text_secondary"
         android:fontFamily="monospace" />
 
     <EditText
@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:text=" = 0x"
         android:textSize="12sp"
-        android:textColor="?attr/colorOnSurfaceVariant"
+        android:textColor="@color/text_secondary"
         android:fontFamily="monospace" />
 
     <EditText
@@ -53,5 +53,5 @@
         android:src="@android:drawable/ic_menu_close_clear_cancel"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="Remove register"
-        app:tint="?attr/colorOnSurfaceVariant" />
+        app:tint="@color/text_secondary" />
 </LinearLayout>

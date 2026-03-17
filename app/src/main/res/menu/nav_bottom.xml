@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_psa_decrypt"
+        android:icon="@android:drawable/ic_lock_lock"
+        android:title="PSA" />
+    <item
+        android:id="@+id/nav_keeloq_decrypt"
+        android:icon="@android:drawable/ic_menu_search"
+        android:title="KeeLoq" />
+    <item
+        android:id="@+id/nav_file_manager"
+        android:icon="@android:drawable/ic_menu_agenda"
+        android:title="Files" />
+    <item
+        android:id="@+id/nav_subghz_settings"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:title="SubGHz" />
+    <item
+        android:id="@+id/nav_remote_control"
+        android:icon="@android:drawable/ic_menu_view"
+        android:title="Remote" />
+</menu>

@@ -25,45 +25,32 @@ class BleKeepAliveService : Service() {
             context.stopService(Intent(context, BleKeepAliveService::class.java))
         }
 
-        fun updateBfProgress(context: Context, pct: Int, kps: String) {
-            val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            val tapIntent = Intent(context, MainActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+        fun updateBfProgress(context: Context, pct: Int, speed: String) {
+            val intent = Intent(context, BleKeepAliveService::class.java).apply {
+                action = "UPDATE_BF"
+                putExtra("pct", pct)
+                putExtra("speed", speed)
             }
-            val pendingIntent = PendingIntent.getActivity(
-                context, 0, tapIntent,
-                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-            )
-            val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-                .setContentTitle("KeeLoq BF — $pct%")
-                .setContentText("$kps keys/sec")
-                .setSmallIcon(android.R.drawable.stat_sys_data_bluetooth)
-                .setOngoing(true)
-                .setContentIntent(pendingIntent)
-                .setProgress(100, pct, false)
-                .build()
-            nm.notify(NOTIFICATION_ID, notification)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                context.startForegroundService(intent)
+            } else {
+                context.startService(intent)
+            }
         }
 
         fun clearBfProgress(context: Context) {
-            val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            val tapIntent = Intent(context, MainActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+            val intent = Intent(context, BleKeepAliveService::class.java).apply {
+                action = "CLEAR_BF"
             }
-            val pendingIntent = PendingIntent.getActivity(
-                context, 0, tapIntent,
-                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-            )
-            val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-                .setContentTitle("ARF Companion")
-                .setContentText("Connected to Flipper — BLE active")
-                .setSmallIcon(android.R.drawable.stat_sys_data_bluetooth)
-                .setOngoing(true)
-                .setContentIntent(pendingIntent)
-                .build()
-            nm.notify(NOTIFICATION_ID, notification)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                context.startForegroundService(intent)
+            } else {
+                context.startService(intent)
+            }
         }
     }
+
+    private var bfProgressText: String? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -71,6 +58,17 @@ class BleKeepAliveService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        when (intent?.action) {
+            "UPDATE_BF" -> {
+                val pct = intent.getIntExtra("pct", 0)
+                val speed = intent.getStringExtra("speed") ?: ""
+                bfProgressText = "BF: $pct% — $speed keys/sec"
+            }
+            "CLEAR_BF" -> {
+                bfProgressText = null
+            }
+        }
+
         val tapIntent = Intent(this, MainActivity::class.java).apply {
             this.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
         }
@@ -79,9 +77,11 @@ class BleKeepAliveService : Service() {
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
+        val contentText = bfProgressText ?: "Connected to Flipper — BLE active"
+
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle("ARF Companion")
-            .setContentText("Connected to Flipper — BLE active")
+            .setContentText(contentText)
             .setSmallIcon(android.R.drawable.stat_sys_data_bluetooth)
             .setOngoing(true)
             .setContentIntent(pendingIntent)

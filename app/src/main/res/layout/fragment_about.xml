@@ -2,77 +2,160 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorSurface">
+    android:background="@color/dark_surface">
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="24dp">
-
-    <ImageView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/inspiration_banner"
-        android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
-        android:layout_marginBottom="16dp" />
+        android:orientation="vertical"
+        android:padding="20dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="ARF Companion"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:textColor="?attr/colorOnSurface"
-        android:layout_marginBottom="8dp" />
+        <!-- Hero logo block -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="@drawable/card_bg_accent"
+            android:padding="32dp"
+            android:layout_marginBottom="20dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="v1.0"
-        android:textSize="14sp"
-        android:textColor="?attr/colorOnSurfaceVariant"
-        android:layout_marginBottom="16dp" />
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@mipmap/ic_launcher_foreground"
+                android:scaleType="fitCenter"
+                android:layout_marginBottom="16dp" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:lineSpacingExtra="4dp"
-        android:text="Companion app for ARF Firmware\nCrypto offloader/settings manager for the ARF Firmware."
-        android:textSize="14sp"
-        android:textColor="?attr/colorOnSurface" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ARF COMPANION"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.15"
+                android:textColor="@color/text_primary"
+                android:layout_marginBottom="4dp" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?attr/colorOutline"
-        android:layout_marginBottom="16dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="v1.0  ·  ARF Firmware"
+                android:textSize="12sp"
+                android:textColor="@color/text_secondary"
+                android:fontFamily="monospace" />
+        </LinearLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:lineSpacingExtra="4dp"
-        android:text="Firmware:\nhttps://github.com/D4C1-Labs/Flipper-ARF\n\nCompanion App:\nhttps://github.com/D4C1-Labs/arf-android-companion"
-        android:textSize="13sp"
-        android:textColor="?attr/colorPrimary"
-        android:autoLink="web" />
+        <!-- Info card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/card_bg"
+            android:padding="16dp"
+            android:layout_marginBottom="12dp">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?attr/colorOutline"
-        android:layout_marginBottom="16dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DESCRIPTION"
+                android:textSize="9sp"
+                android:letterSpacing="0.15"
+                android:textColor="@color/text_secondary"
+                android:fontFamily="monospace"
+                android:layout_marginBottom="8dp" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Built by luhf for ARF Firmware\nARF Firmware by D4rk$1d3, luhf, 47LeCoste, DACI\n[and many others]"
-        android:textColor="?attr/colorOnSurfaceVariant"
-        android:textSize="12sp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Companion app for ARF Firmware. Crypto offloader and settings manager for the Flipper Zero ARF firmware."
+                android:textSize="13sp"
+                android:lineSpacingExtra="4dp"
+                android:textColor="@color/text_primary" />
+        </LinearLayout>
 
-</LinearLayout>
+        <!-- Links card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/card_bg"
+            android:padding="16dp"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="LINKS"
+                android:textSize="9sp"
+                android:letterSpacing="0.15"
+                android:textColor="@color/text_secondary"
+                android:fontFamily="monospace"
+                android:layout_marginBottom="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Firmware"
+                android:textSize="10sp"
+                android:textColor="@color/text_secondary"
+                android:fontFamily="monospace"
+                android:layout_marginBottom="2dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="https://github.com/D4C1-Labs/Flipper-ARF"
+                android:textSize="12sp"
+                android:textColor="@color/accent"
+                android:fontFamily="monospace"
+                android:autoLink="web"
+                android:layout_marginBottom="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Companion App"
+                android:textSize="10sp"
+                android:textColor="@color/text_secondary"
+                android:fontFamily="monospace"
+                android:layout_marginBottom="2dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="https://github.com/D4C1-Labs/arf-android-companion"
+                android:textSize="12sp"
+                android:textColor="@color/accent"
+                android:fontFamily="monospace"
+                android:autoLink="web" />
+        </LinearLayout>
+
+        <!-- Credits card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/card_bg"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CREDITS"
+                android:textSize="9sp"
+                android:letterSpacing="0.15"
+                android:textColor="@color/text_secondary"
+                android:fontFamily="monospace"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Built by luhf for ARF Firmware\nARF Firmware by D4rk$1d3, luhf, 47LeCoste, DACI\n[and many others]"
+                android:textSize="12sp"
+                android:lineSpacingExtra="4dp"
+                android:textColor="@color/text_secondary"
+                android:fontFamily="monospace" />
+        </LinearLayout>
+
+    </LinearLayout>
 </ScrollView>

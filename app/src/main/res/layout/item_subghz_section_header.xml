@@ -7,7 +7,7 @@
     android:paddingHorizontal="16dp"
     android:paddingVertical="12dp"
     android:layout_marginTop="12dp"
-    android:background="?attr/colorSurfaceVariant"
+    android:background="@color/dark_card"
     android:foreground="?attr/selectableItemBackground">
 
     <TextView
@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:text="\u25BC"
         android:textSize="12sp"
-        android:textColor="?attr/colorPrimary"
+        android:textColor="@color/accent"
         android:paddingEnd="8dp" />
 
     <TextView
@@ -26,7 +26,7 @@
         android:layout_weight="1"
         android:text="Section"
         android:textSize="13sp"
-        android:textColor="?attr/colorPrimary"
+        android:textColor="@color/accent"
         android:textAllCaps="true"
         android:letterSpacing="0.05" />
 
@@ -36,6 +36,6 @@
         android:layout_height="wrap_content"
         android:text="3"
         android:textSize="12sp"
-        android:textColor="?attr/colorOnSurfaceVariant"
+        android:textColor="@color/text_secondary"
         android:visibility="gone" />
 </LinearLayout>

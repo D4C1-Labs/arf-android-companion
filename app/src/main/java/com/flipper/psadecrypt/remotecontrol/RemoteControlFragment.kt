@@ -8,7 +8,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -20,7 +19,7 @@ class RemoteControlFragment : Fragment() {
 
     private lateinit var imgScreen: ImageView
     private lateinit var txtNotConnected: TextView
-    private lateinit var screenContainer: FrameLayout
+    private lateinit var screenContainer: View
     private lateinit var controlsContainer: View
 
     private val handler = Handler(Looper.getMainLooper())

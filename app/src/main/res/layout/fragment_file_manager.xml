@@ -4,17 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="?attr/colorSurface">
+    android:background="@color/dark_surface">
 
-    <!-- Current path bar -->
+    <!-- Path bar -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="44dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:paddingHorizontal="8dp"
-        android:paddingVertical="6dp"
-        android:background="?attr/colorSurfaceVariant">
+        android:background="@color/dark_card"
+        android:paddingVertical="4dp">
 
         <ImageButton
             android:id="@+id/btn_up"
@@ -23,7 +23,7 @@
             android:src="@android:drawable/ic_menu_revert"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Go up"
-            app:tint="?attr/colorPrimary" />
+            app:tint="@color/accent" />
 
         <TextView
             android:id="@+id/txt_current_path"
@@ -31,8 +31,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="/ext"
-            android:textSize="13sp"
-            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textSize="12sp"
+            android:textColor="@color/text_secondary"
             android:fontFamily="monospace"
             android:paddingStart="8dp"
             android:singleLine="true"
@@ -45,26 +45,22 @@
             android:src="@android:drawable/ic_popup_sync"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Refresh"
-            app:tint="?attr/colorOnSurfaceVariant" />
+            app:tint="@color/text_secondary" />
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?attr/colorOutline" />
+    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/dark_divider" />
 
-    <!-- Not connected overlay -->
     <TextView
         android:id="@+id/txt_not_connected"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="Connect to Flipper via BLE first"
-        android:textSize="14sp"
-        android:textColor="?attr/colorOnSurfaceVariant"
+        android:textSize="13sp"
+        android:textColor="@color/text_secondary"
+        android:fontFamily="monospace"
         android:gravity="center"
         android:visibility="gone" />
 
-    <!-- Loading indicator -->
     <ProgressBar
         android:id="@+id/progress_loading"
         android:layout_width="wrap_content"
@@ -73,58 +69,56 @@
         android:visibility="gone"
         android:layout_marginTop="48dp" />
 
-    <!-- Error text -->
     <TextView
         android:id="@+id/txt_error"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text=""
-        android:textSize="13sp"
-        android:textColor="#FFE57373"
+        android:textSize="12sp"
+        android:textColor="@color/accent"
+        android:fontFamily="monospace"
         android:gravity="center"
         android:padding="16dp"
         android:visibility="gone" />
 
-    <!-- File list -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_files"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:clipToPadding="false"
-        android:paddingBottom="72dp" />
+        android:paddingBottom="8dp" />
 
-    <!-- Bottom action bar -->
+    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/dark_divider" />
+
     <LinearLayout
         android:id="@+id/bottom_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="52dp"
         android:orientation="horizontal"
         android:gravity="center"
-        android:padding="8dp"
-        android:background="?attr/colorSurfaceVariant">
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
+        android:background="@color/dark_card">
 
         <Button
             android:id="@+id/btn_upload"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="36dp"
             android:layout_weight="1"
-            android:layout_marginEnd="4dp"
-            android:text="Upload File"
-            android:textSize="12sp"
-
- />
+            android:layout_marginEnd="6dp"
+            android:text="↑  UPLOAD"
+            android:textSize="11sp"
+            style="@style/DarkButton.Outline" />
 
         <Button
             android:id="@+id/btn_mkdir"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="36dp"
             android:layout_weight="1"
-            android:layout_marginStart="4dp"
-            android:text="New Folder"
-            android:textSize="12sp"
-
- />
+            android:layout_marginStart="6dp"
+            android:text="+  NEW FOLDER"
+            android:textSize="11sp"
+            style="@style/DarkButton.Outline" />
     </LinearLayout>
 
 </LinearLayout>
