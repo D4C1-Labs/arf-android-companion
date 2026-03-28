@@ -6,11 +6,13 @@
     android:gravity="center_vertical"
     android:background="?attr/colorSurfaceVariant">
 
+    <!-- Left accent bar -->
     <View
         android:layout_width="2dp"
         android:layout_height="match_parent"
         android:background="?attr/colorPrimary" />
 
+    <!-- Setting label e.g. "Add standard frequencies" -->
     <TextView
         android:id="@+id/txt_toggle_label"
         android:layout_width="0dp"
@@ -22,6 +24,7 @@
         android:paddingStart="14dp"
         android:paddingVertical="12dp" />
 
+    <!-- Toggle switch for this boolean setting -->
     <Switch
         android:id="@+id/switch_toggle"
         android:layout_width="wrap_content"

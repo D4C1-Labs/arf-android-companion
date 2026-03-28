@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Dynamic M3 theme: colorPrimary comes from Android 12+ wallpaper engine -->
     <style name="AppTheme" parent="Theme.Material3.Dark.NoActionBar">
         <item name="colorOnPrimary">@color/black</item>
         <item name="colorPrimaryContainer">@color/primary_container</item>
@@ -21,6 +22,7 @@
         <item name="navigationViewStyle">@style/NavViewStyle</item>
         <item name="materialAlertDialogTheme">@style/M3AlertDialog</item>
     </style>
+    <!-- Static fallback theme for Android <12 - hardcodes ARF orange as primary -->
     <style name="AppTheme.Static" parent="Theme.MaterialComponents.NoActionBar">
         <item name="colorPrimary">@color/accent</item>
         <item name="colorSurface">@color/dark_surface</item>
@@ -41,31 +43,38 @@
         <item name="materialAlertDialogTheme">@style/M3AlertDialog.Static</item>
         <item name="colorSecondaryContainer">@color/nav_indicator_static</item>
     </style>
+    <!-- Default filled button style used across the app -->
     <style name="DarkButton" parent="Widget.Material3.Button">
         <item name="backgroundTint">?attr/colorPrimary</item>
         <item name="android:textColor">@color/black</item>
         <item name="shapeAppearance">@style/ShapeAppearance.App.Button</item>
     </style>
+    <!-- Filled button for static theme, uses hardcoded accent color -->
     <style name="DarkButton.Static" parent="Widget.MaterialComponents.Button">
         <item name="backgroundTint">@color/accent</item>
         <item name="android:textColor">@color/black</item>
         <item name="shapeAppearance">@style/ShapeAppearance.App.Button</item>
     </style>
+    <!-- Text-only button style e.g. dialog actions, minor actions -->
     <style name="TextButton" parent="Widget.Material3.Button.TextButton">
         <item name="android:textColor">?attr/colorPrimary</item>
     </style>
+    <!-- Rounded corner shape shared by all buttons -->
     <style name="ShapeAppearance.App.Button" parent="ShapeAppearance.Material3.Corner.Full">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">12dp</item>
     </style>
+    <!-- Navigation drawer style for dynamic M3 theme -->
     <style name="NavViewStyle" parent="Widget.Material3.NavigationView">
         <item name="itemShapeAppearance">@style/ShapeAppearance.App.Button</item>
 
     </style>
+    <!-- Alert dialog overlay: rounded corners + blurred dark background -->
     <style name="M3AlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="shapeAppearanceOverlay">@style/ShapeAppearance.App.Dialog</item>
         <item name="android:background">@color/dialog_blur_bg</item>
     </style>
+    <!-- Alert dialog overlay for static theme, also sets primary/text colors -->
     <style name="M3AlertDialog.Static" parent="ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="shapeAppearanceOverlay">@style/ShapeAppearance.App.Dialog</item>
         <item name="colorSurface">@color/dialog_blur_bg</item>
@@ -74,11 +83,13 @@
         <item name="colorOnSurface">@color/text_primary</item>
         <item name="colorOnSurfaceVariant">@color/text_secondary</item>
     </style>
+    <!-- Navigation drawer style for static theme - hardcodes icon/text colors -->
     <style name="NavViewStyle.Static" parent="Widget.Material3.NavigationView">
         <item name="itemShapeAppearance">@style/ShapeAppearance.App.Button</item>
         <item name="itemIconTint">@color/accent</item>
         <item name="itemTextColor">@color/text_primary</item>
     </style>
+    <!-- Rounded corner shape for dialogs (slightly less rounded than buttons) -->
     <style name="ShapeAppearance.App.Dialog" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">8dp</item>

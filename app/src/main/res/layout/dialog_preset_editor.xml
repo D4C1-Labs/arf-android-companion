@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Preset name -->
+        <!-- Preset name input field -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
             android:inputType="text"
             android:paddingBottom="12dp" />
 
-        <!-- Paste from clipboard -->
+        <!-- Paste full hex config string from clipboard to auto-fill fields -->
         <Button
             android:id="@+id/btn_paste_hex"
             style="@style/TextButton"
@@ -39,7 +39,7 @@
             android:layout_marginBottom="8dp"
  />
 
-        <!-- Registers section -->
+        <!-- Section label: CC1101 register address/value pairs -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -49,7 +49,7 @@
             android:paddingTop="8dp"
             android:paddingBottom="8dp" />
 
-        <!-- Register header row -->
+        <!-- Column headers for the register pair rows below -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -76,7 +76,7 @@
                 android:gravity="center" />
         </LinearLayout>
 
-        <!-- Dynamic register pair rows -->
+        <!-- Dynamically inflated item_register_pair rows added by SubGhzSettingsFragment -->
         <LinearLayout
             android:id="@+id/register_container"
             android:layout_width="match_parent"
@@ -93,7 +93,7 @@
 
  />
 
-        <!-- Divider -->
+        <!-- Divider between registers and PA table sections -->
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -101,7 +101,7 @@
             android:layout_marginVertical="12dp"
             android:alpha="0.3" />
 
-        <!-- PA Table section -->
+        <!-- Section label: CC1101 PA power table -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -110,7 +110,7 @@
             android:letterSpacing="0.05"
             android:paddingBottom="8dp" />
 
-        <!-- Row 1: PA bytes 0-3 -->
+        <!-- PA table bytes 0-3 (first row of 8-byte table) -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -167,7 +167,7 @@
                 android:inputType="textCapCharacters|textNoSuggestions" />
         </LinearLayout>
 
-        <!-- Row 2: PA bytes 4-7 -->
+        <!-- PA table bytes 4-7 (second row of 8-byte table) -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

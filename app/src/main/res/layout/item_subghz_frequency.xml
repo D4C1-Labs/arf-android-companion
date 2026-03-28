@@ -7,11 +7,13 @@
     android:gravity="center_vertical"
     android:background="?attr/colorSurfaceVariant">
 
+    <!-- Left accent bar -->
     <View
         android:layout_width="2dp"
         android:layout_height="match_parent"
         android:background="?attr/colorPrimary" />
 
+    <!-- Frequency value e.g. "433.920 MHz" -->
     <TextView
         android:id="@+id/txt_frequency"
         android:layout_width="0dp"
@@ -24,6 +26,7 @@
         android:paddingStart="14dp"
         android:paddingVertical="10dp" />
 
+    <!-- Badge shown only on the default frequency -->
     <TextView
         android:id="@+id/txt_default_badge"
         android:layout_width="wrap_content"
@@ -35,6 +38,7 @@
         android:paddingVertical="2dp"
         android:visibility="gone" />
 
+    <!-- Remove this frequency entry -->
     <ImageButton
         android:id="@+id/btn_delete"
         android:layout_width="32dp"

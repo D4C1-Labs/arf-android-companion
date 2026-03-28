@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- App-wide string resources -->
     <string name="app_name">ARF Companion</string>
     <string name="nav_open">Open navigation</string>
     <string name="nav_close">Close navigation</string>

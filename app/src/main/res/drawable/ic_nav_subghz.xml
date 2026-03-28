@@ -1,3 +1,38 @@
-<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="24dp" android:height="24dp" android:viewportWidth="24" android:viewportHeight="24">
-    <path android:fillColor="@android:color/white" android:pathData="M12,21,L12,21,c-0.55,0,-1,-0.45,-1,-1v-4c0,-0.55,0.45,-1,1,-1h0c0.55,0,1,0.45,1,1v4C13,20.55,12.55,21,12,21zM4.22,5.64L2.81,4.22C1.04,6.08,0,8.67,0,11.5C0,14.33,1.04,16.92,2.81,18.78l1.41,-1.41C2.68,15.82,2,13.74,2,11.5S2.68,7.18,4.22,5.64zM21.19,4.22l-1.41,1.41C21.32,7.18,22,9.26,22,11.5s-0.68,4.32,-2.22,5.86l1.41,1.41C22.96,16.92,24,14.33,24,11.5C24,8.67,22.96,6.08,21.19,4.22zM7.05,8.46L5.63,7.04C4.01,8.59,3,10.93,3,11.5c0,1.85,0.78,3.52,2.03,4.72l1.41-1.41C5.56,13.92,5,12.77,5,11.5,5,10.23,5.77,8.93,7.05,8.46zM18.37,7.04l-1.41,1.41C18.23,9.43,19,10.72,19,11.5c0,1.27-0.56,2.42-1.44,3.22l1.41,1.41C20.22,15.02,21,13.35,21,11.5,21,10.08,19.99,7.59,18.37,7.04zM12,6c-3.03,0-5.5,2.47-5.5,5.5S8.97,17,12,17s5.5-2.47,5.5-5.5S15.03,6,12,6zM12,15c-1.93,0-3.5-1.57-3.5-3.5S10.07,8,12,8s3.5,1.57,3.5,3.5S13.93,15,12,15z"/>
+<!-- Navigation icon: Sub-GHz settings screen (radio signal broadcast) -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Center indicator dot (small rounded rect at bottom) -->
+    <path
+        android:fillColor="?attr/colorOnSurface"
+        android:pathData="M12,21L12,21c-0.55,0-1-0.45-1-1v-4c0-0.55,0.45-1,1-1h0c0.55,0,1,0.45,1,1v4C13,20.55,12.55,21,12,21z"/>
+
+    <!-- Outer left arc (widest signal ring, left side) -->
+    <path
+        android:fillColor="?attr/colorOnSurface"
+        android:pathData="M4.22,5.64L2.81,4.22C1.04,6.08,0,8.67,0,11.5C0,14.33,1.04,16.92,2.81,18.78l1.41-1.41C2.68,15.82,2,13.74,2,11.5S2.68,7.18,4.22,5.64z"/>
+
+    <!-- Outer right arc (widest signal ring, right side) -->
+    <path
+        android:fillColor="?attr/colorOnSurface"
+        android:pathData="M21.19,4.22l-1.41,1.41C21.32,7.18,22,9.26,22,11.5s-0.68,4.32-2.22,5.86l1.41,1.41C22.96,16.92,24,14.33,24,11.5C24,8.67,22.96,6.08,21.19,4.22z"/>
+
+    <!-- Inner left arc (closer signal ring, left side) -->
+    <path
+        android:fillColor="?attr/colorOnSurface"
+        android:pathData="M5.64,5.14 A9,9 0 0,0 5.64,17.86 L7.05,16.45 A7,7 0 0,1 7.05,6.55 Z"/>
+
+    <!-- Inner right arc (closer signal ring, right side) -->
+    <path
+        android:fillColor="?attr/colorOnSurface"
+        android:pathData="M18.36,5.14 A9,9 0 0,1 18.36,17.86 L16.95,16.45 A7,7 0 0,0 16.95,6.55 Z"/>
+
+    <!-- Broadcast source circle (center of signal) -->
+    <path
+        android:fillColor="?attr/colorOnSurface"
+        android:pathData="M12,6c-3.03,0-5.5,2.47-5.5,5.5S8.97,17,12,17s5.5-2.47,5.5-5.5S15.03,6,12,6zM12,15c-1.93,0-3.5-1.57-3.5-3.5S10.07,8,12,8s3.5,1.57,3.5,3.5S13.93,15,12,15z"/>
+
 </vector>

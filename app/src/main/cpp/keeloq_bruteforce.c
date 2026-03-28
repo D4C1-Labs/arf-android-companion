@@ -19,6 +19,8 @@ static int g_big_cores[MAX_BF_THREADS];
 static int g_num_big_cores = 0;
 static int g_cores_detected = 0;
 
+/* Read cpufreq to find the fastest cores (big cores on big.LITTLE).
+ * Threads are pinned to these to maximise brute-force throughput. */
 #define MAX_CANDIDATES 32
 typedef struct {
     uint64_t mfkey;
@@ -93,6 +95,8 @@ static inline bool validate_hop(uint32_t dec, uint8_t expected_btn, uint16_t exp
     return false;
 }
 
+/* Type 6 (Magic Serial Simple): manufacturer key derived from serial bytes.
+ * Upper 40 bits fixed from serial, lower 32 bits are searched. */
 static inline void store_candidate(uint64_t mfkey, uint64_t devkey, uint32_t cnt, int32_t learn_type) {
     int32_t idx = __sync_fetch_and_add(&g_num_candidates, 1);
     if (idx < MAX_CANDIDATES) {
@@ -142,6 +146,8 @@ static void brute_type6(
     g_keys_tested[thread_idx] = (int32_t)(end64 - start64);
 }
 
+/* Type 7 (Magic Serial Custom): upper 4 bytes taken directly from fix word,
+ * lower 32 bits are searched. */
 static void brute_type7(
     uint32_t serial, uint32_t fix, uint32_t hop1, uint32_t hop2,
     uint8_t btn, uint16_t disc,
@@ -190,6 +196,8 @@ static void brute_type7(
     g_keys_tested[thread_idx] = (int32_t)(end64 - start64);
 }
 
+/* Type 8 (Magic Serial Extended): lower 24 bits fixed from serial,
+ * upper 40 bits are searched. */
 static void brute_type8(
     uint32_t serial, uint32_t hop1, uint32_t hop2,
     uint8_t btn, uint16_t disc,

@@ -7,6 +7,7 @@
     android:gravity="center_vertical"
     android:paddingVertical="2dp">
 
+    <!-- "0x" prefix label for address field -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -15,6 +16,7 @@
         android:textColor="?attr/colorOnSurfaceVariant"
         android:fontFamily="monospace" />
 
+    <!-- Hex address input (2 chars) -->
     <EditText
         android:id="@+id/edit_addr"
         android:layout_width="48dp"
@@ -26,6 +28,7 @@
         android:maxLength="2"
         android:inputType="textCapCharacters|textNoSuggestions" />
 
+    <!-- Separator + "0x" prefix label for value field -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -34,6 +37,7 @@
         android:textColor="?attr/colorOnSurfaceVariant"
         android:fontFamily="monospace" />
 
+    <!-- Hex value input (2 chars) -->
     <EditText
         android:id="@+id/edit_val"
         android:layout_width="48dp"
@@ -45,6 +49,7 @@
         android:maxLength="2"
         android:inputType="textCapCharacters|textNoSuggestions" />
 
+    <!-- Delete this register row -->
     <ImageButton
         android:id="@+id/btn_delete_reg"
         android:layout_width="28dp"

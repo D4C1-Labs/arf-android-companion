@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:background="?attr/colorSurface">
 
-    <!-- Current path bar -->
+    <!-- Top bar showing current directory path with up/refresh buttons -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,6 +16,7 @@
         android:paddingVertical="6dp"
         android:background="?attr/colorSurfaceVariant">
 
+        <!-- Navigate to parent directory -->
         <ImageButton
             android:id="@+id/btn_up"
             android:layout_width="36dp"
@@ -25,6 +26,7 @@
             android:contentDescription="Go up"
             app:tint="?attr/colorPrimary" />
 
+        <!-- Current path, ellipsized at start when too long -->
         <TextView
             android:id="@+id/txt_current_path"
             android:layout_width="0dp"
@@ -38,6 +40,7 @@
             android:singleLine="true"
             android:ellipsize="start" />
 
+        <!-- Reload current directory listing -->
         <ImageButton
             android:id="@+id/btn_refresh"
             android:layout_width="36dp"
@@ -85,7 +88,7 @@
         android:padding="16dp"
         android:visibility="gone" />
 
-    <!-- File list -->
+    <!-- Scrollable list of files and folders in current directory -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_files"
         android:layout_width="match_parent"
@@ -94,7 +97,7 @@
         android:clipToPadding="false"
         android:paddingBottom="72dp" />
 
-    <!-- Bottom action bar -->
+    <!-- Bottom action bar: upload a file or create a new folder -->
     <LinearLayout
         android:id="@+id/bottom_bar"
         android:layout_width="match_parent"
@@ -104,6 +107,7 @@
         android:padding="8dp"
         android:background="?attr/colorSurfaceVariant">
 
+        <!-- Upload a file from the phone to the Flipper -->
         <Button
             android:id="@+id/btn_upload"
             android:layout_width="0dp"
@@ -115,6 +119,7 @@
 
  />
 
+        <!-- Create a new folder on the Flipper -->
         <Button
             android:id="@+id/btn_mkdir"
             android:layout_width="0dp"

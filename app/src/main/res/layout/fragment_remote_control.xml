@@ -26,6 +26,7 @@
         android:gravity="center"
         android:padding="16dp">
 
+        <!-- Decoded Flipper screen bitmap, orange background matches device LCD -->
         <ImageView
             android:id="@+id/img_screen"
             android:layout_width="match_parent"
@@ -45,7 +46,7 @@
         android:gravity="center_horizontal"
         android:paddingBottom="24dp">
 
-        <!-- UP -->
+        <!-- D-pad up button -->
         <Button
             android:id="@+id/btn_up"
             android:layout_width="64dp"
@@ -91,7 +92,7 @@
                 android:backgroundTint="?attr/colorSurfaceVariant" />
         </LinearLayout>
 
-        <!-- DOWN -->
+        <!-- D-pad down button -->
         <Button
             android:id="@+id/btn_down"
             android:layout_width="64dp"
@@ -101,7 +102,7 @@
             android:textColor="?attr/colorOnSurface"
             android:backgroundTint="?attr/colorSurfaceVariant" />
 
-        <!-- BACK -->
+        <!-- Back button below d-pad -->
         <Button
             android:id="@+id/btn_back"
             android:layout_width="120dp"

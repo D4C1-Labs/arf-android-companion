@@ -24,6 +24,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="16dp">
+            <!-- Card title -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -32,6 +33,7 @@
                 android:textStyle="bold"
                 android:textColor="?attr/colorOnSurface"
                 android:layout_marginBottom="2dp" />
+            <!-- Card subtitle describing brute force method -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -39,6 +41,7 @@
                 android:textSize="12sp"
                 android:textColor="?attr/colorOnSurfaceVariant"
                 android:layout_marginBottom="12dp" />
+            <!-- Fix word input (8 hex chars) -->
             <EditText
                 android:id="@+id/kl_fix_input"
                 android:layout_width="match_parent"
@@ -56,6 +59,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginBottom="8dp">
+                <!-- First captured hop value -->
                 <EditText
                     android:id="@+id/kl_hop1_input"
                     android:layout_width="0dp"
@@ -69,6 +73,7 @@
                     android:textColorHint="?attr/colorOutline"
                     android:backgroundTint="?attr/colorPrimary"
                     android:layout_marginEnd="8dp" />
+                <!-- Second captured hop value -->
                 <EditText
                     android:id="@+id/kl_hop2_input"
                     android:layout_width="0dp"
@@ -82,6 +87,7 @@
                     android:textColorHint="?attr/colorOutline"
                     android:backgroundTint="?attr/colorPrimary" />
             </LinearLayout>
+            <!-- KeeLoq serial type selector (Type 1/2/3) -->
             <Spinner
                 android:id="@+id/kl_type_spinner"
                 android:layout_width="match_parent"
@@ -100,6 +106,7 @@
                     android:textSize="13sp"
                     android:textColor="?attr/colorOnSurfaceVariant"
                     android:layout_marginEnd="8dp" />
+                <!-- Number of CPU cores to use for brute force -->
                 <Spinner
                     android:id="@+id/kl_core_spinner"
                     android:layout_width="0dp"
@@ -110,6 +117,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
+                <!-- Start the brute force attack -->
                 <Button
                     android:id="@+id/kl_run_button"
                     android:layout_width="0dp"
@@ -118,6 +126,7 @@
                     android:text="Run BF"
                     android:textSize="12sp"
                     android:layout_marginEnd="4dp" />
+                <!-- Run a speed benchmark without searching -->
                 <Button
                     android:id="@+id/kl_bench_button"
                     android:layout_width="0dp"
@@ -142,6 +151,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="16dp">
+            <!-- Status card title -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -150,6 +160,7 @@
                 android:textStyle="bold"
                 android:textColor="?attr/colorOnSurface"
                 android:layout_marginBottom="8dp" />
+            <!-- Current operation status e.g. "Running", "Found!" -->
             <TextView
                 android:id="@+id/kl_status_text"
                 android:layout_width="match_parent"
@@ -158,6 +169,7 @@
                 android:textSize="14sp"
                 android:textColor="?attr/colorOnSurface"
                 android:layout_marginBottom="8dp" />
+            <!-- Brute force progress 0-100% -->
             <ProgressBar
                 android:id="@+id/kl_progress_bar"
                 style="?android:attr/progressBarStyleHorizontal"
@@ -168,6 +180,7 @@
                 android:progressTint="?attr/colorPrimary"
                 android:progressBackgroundTint="?attr/colorOutline"
                 android:layout_marginBottom="4dp" />
+            <!-- Percentage and keys-tried counter -->
             <TextView
                 android:id="@+id/kl_progress_text"
                 android:layout_width="match_parent"
@@ -176,6 +189,7 @@
                 android:textSize="13sp"
                 android:textColor="?attr/colorOnSurfaceVariant"
                 android:fontFamily="monospace" />
+            <!-- Keys-per-second throughput -->
             <TextView
                 android:id="@+id/kl_speed_text"
                 android:layout_width="match_parent"
@@ -185,6 +199,7 @@
                 android:textColor="?attr/colorOnSurfaceVariant"
                 android:fontFamily="monospace"
                 android:layout_marginBottom="8dp" />
+            <!-- Found key result, selectable for copy -->
             <TextView
                 android:id="@+id/kl_result_text"
                 android:layout_width="match_parent"
@@ -194,6 +209,7 @@
                 android:fontFamily="monospace"
                 android:textColor="?attr/colorPrimary"
                 android:textIsSelectable="true" />
+            <!-- Note about CPU throttling affecting speed -->
             <TextView
                 android:id="@+id/kl_disclaimer_text"
                 android:layout_width="match_parent"

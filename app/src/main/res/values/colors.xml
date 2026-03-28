@@ -1,18 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Base black used for button text on primary-colored backgrounds -->
     <color name="black">#FF000000</color>
+    <!-- Main background surface color -->
     <color name="dark_surface">#FF121212</color>
+    <!-- Card/sheet surface, slightly lighter than dark_surface -->
     <color name="dark_card">#FF1E1E1E</color>
+    <!-- Divider and outline color -->
     <color name="dark_divider">#FF333333</color>
+    <!-- ARF orange accent - primary brand color in static theme -->
     <color name="accent">#FFFF6F00</color>
+    <!-- Primary text color -->
     <color name="text_primary">#FFEEEEEE</color>
+    <!-- Secondary / hint text color -->
     <color name="text_secondary">#FFB0B0B0</color>
+    <!-- Success / connected state indicator -->
     <color name="green">#FF4CAF50</color>
+    <!-- Log panel background, darker than surface -->
     <color name="log_bg">#FF0A0A0A</color>
+    <!-- Log panel monospace text color -->
     <color name="log_text">#FFAAAAAA</color>
+    <!-- Dark orange container used in dynamic M3 theme -->
     <color name="primary_container">#FF3D1F00</color>
+    <!-- Text/icon color on primary_container -->
     <color name="on_primary_container">#FFFFBD7A</color>
+    <!-- Semi-transparent nav drawer background (50% opacity) -->
     <color name="drawer_bg">#801E1E1E</color>
+    <!-- Blurred dialog background with dark blue tint -->
     <color name="dialog_blur_bg">#CC1A1A2E</color>
+    <!-- Selected nav item indicator in static theme (30% orange) -->
     <color name="nav_indicator_static">#4DFF6F00</color>
 </resources>

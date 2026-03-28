@@ -10,6 +10,7 @@
     android:orientation="vertical"
     android:padding="24dp">
 
+    <!-- Banner image at top of about screen -->
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,6 +19,7 @@
         android:scaleType="fitCenter"
         android:layout_marginBottom="16dp" />
 
+    <!-- App name heading -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -27,6 +29,7 @@
         android:textColor="?attr/colorOnSurface"
         android:layout_marginBottom="8dp" />
 
+    <!-- Version string -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -35,6 +38,7 @@
         android:textColor="?attr/colorOnSurfaceVariant"
         android:layout_marginBottom="16dp" />
 
+    <!-- Short app description -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -50,6 +54,7 @@
         android:background="?attr/colorOutline"
         android:layout_marginBottom="16dp" />
 
+    <!-- GitHub links for firmware and companion app -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -66,6 +71,7 @@
         android:background="?attr/colorOutline"
         android:layout_marginBottom="16dp" />
 
+    <!-- Credits footer -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

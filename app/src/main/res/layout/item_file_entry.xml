@@ -9,7 +9,7 @@
     android:paddingVertical="10dp"
     android:background="?attr/selectableItemBackground">
 
-    <!-- File/folder icon -->
+    <!-- File/folder type icon (set in code based on entry type) -->
     <ImageView
         android:id="@+id/img_icon"
         android:layout_width="28dp"
@@ -17,7 +17,7 @@
         android:src="@android:drawable/ic_menu_save"
         app:tint="?attr/colorOnSurfaceVariant" />
 
-    <!-- Name + size -->
+    <!-- File name and size info -->
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -25,6 +25,7 @@
         android:orientation="vertical"
         android:paddingStart="12dp">
 
+        <!-- Entry name, truncated in middle if too long -->
         <TextView
             android:id="@+id/txt_name"
             android:layout_width="match_parent"
@@ -35,6 +36,7 @@
             android:singleLine="true"
             android:ellipsize="middle" />
 
+        <!-- File size, hidden for directories -->
         <TextView
             android:id="@+id/txt_size"
             android:layout_width="match_parent"
@@ -45,7 +47,7 @@
             android:visibility="gone" />
     </LinearLayout>
 
-    <!-- Overflow menu -->
+    <!-- Overflow menu: download, delete, etc. -->
     <ImageButton
         android:id="@+id/btn_more"
         android:layout_width="32dp"

@@ -24,6 +24,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="16dp">
+            <!-- Card title -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -32,6 +33,7 @@
                 android:textStyle="bold"
                 android:textColor="?attr/colorOnSurface"
                 android:layout_marginBottom="2dp" />
+            <!-- Card subtitle -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -44,6 +46,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginBottom="12dp">
+                <!-- First TEA word input (8 hex chars) -->
                 <EditText
                     android:id="@+id/w0_input"
                     android:layout_width="0dp"
@@ -57,6 +60,7 @@
                     android:textColorHint="?attr/colorOutline"
                     android:backgroundTint="?attr/colorPrimary"
                     android:layout_marginEnd="8dp" />
+                <!-- Second TEA word input (8 hex chars) -->
                 <EditText
                     android:id="@+id/w1_input"
                     android:layout_width="0dp"
@@ -75,6 +79,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginBottom="8dp">
+                <!-- Run brute force pass 1 only -->
                 <Button
                     android:id="@+id/run_bf1_button"
                     android:layout_width="0dp"
@@ -83,6 +88,7 @@
                     android:text="Run BF1"
                     android:textSize="12sp"
                     android:layout_marginEnd="4dp" />
+                <!-- Run brute force pass 2 only -->
                 <Button
                     android:id="@+id/run_bf2_button"
                     android:layout_width="0dp"
@@ -91,6 +97,7 @@
                     android:text="Run BF2"
                     android:textSize="12sp"
                     android:layout_marginEnd="4dp" />
+                <!-- Run both passes sequentially -->
                 <Button
                     android:id="@+id/run_both_button"
                     android:layout_width="0dp"
@@ -99,6 +106,7 @@
                     android:text="Run Both"
                     android:textSize="12sp" />
             </LinearLayout>
+            <!-- Run a speed benchmark without searching -->
             <Button
                 android:id="@+id/test_button"
                 android:layout_width="match_parent"
@@ -121,6 +129,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="16dp">
+            <!-- Status card title -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -129,6 +138,7 @@
                 android:textStyle="bold"
                 android:textColor="?attr/colorOnSurface"
                 android:layout_marginBottom="8dp" />
+            <!-- Current operation status -->
             <TextView
                 android:id="@+id/status_text"
                 android:layout_width="match_parent"
@@ -137,6 +147,7 @@
                 android:textSize="14sp"
                 android:textColor="?attr/colorOnSurface"
                 android:layout_marginBottom="8dp" />
+            <!-- Brute force progress 0-100% -->
             <ProgressBar
                 android:id="@+id/progress_bar"
                 style="?android:attr/progressBarStyleHorizontal"
@@ -147,6 +158,7 @@
                 android:progressTint="?attr/colorPrimary"
                 android:progressBackgroundTint="?attr/colorOutline"
                 android:layout_marginBottom="4dp" />
+            <!-- Percentage and keys-tried counter -->
             <TextView
                 android:id="@+id/progress_text"
                 android:layout_width="match_parent"
@@ -155,6 +167,7 @@
                 android:textSize="13sp"
                 android:textColor="?attr/colorOnSurfaceVariant"
                 android:fontFamily="monospace" />
+            <!-- Keys-per-second throughput -->
             <TextView
                 android:id="@+id/speed_text"
                 android:layout_width="match_parent"
@@ -164,6 +177,7 @@
                 android:textColor="?attr/colorOnSurfaceVariant"
                 android:fontFamily="monospace"
                 android:layout_marginBottom="8dp" />
+            <!-- Found key result, selectable for copy -->
             <TextView
                 android:id="@+id/result_text"
                 android:layout_width="match_parent"

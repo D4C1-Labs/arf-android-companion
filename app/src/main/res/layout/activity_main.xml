@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- Main content area - acts as the blur source for the nav drawer overlay -->
     <eightbitlab.com.blurview.BlurTarget
         android:id="@+id/blur_target"
         android:layout_width="match_parent"
@@ -17,6 +18,7 @@
             android:orientation="vertical"
             android:background="?attr/colorSurface">
 
+            <!-- Top toolbar with nav drawer toggle and app title -->
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
@@ -35,6 +37,7 @@
                 android:paddingVertical="6dp"
                 android:background="?attr/colorSurfaceVariant">
 
+                <!-- BLE connection status message -->
                 <TextView
                     android:id="@+id/ble_status_text"
                     android:layout_width="0dp"
@@ -44,6 +47,7 @@
                     android:textSize="12sp"
                     android:textColor="?attr/colorOnSurfaceVariant" />
 
+                <!-- Device selector, visible once scan finds devices -->
                 <Spinner
                     android:id="@+id/device_spinner"
                     android:layout_width="0dp"
@@ -51,6 +55,7 @@
                     android:layout_weight="1"
                     android:visibility="gone" />
 
+                <!-- Scan/connect/disconnect BLE button -->
                 <Button
                     android:id="@+id/ble_button"
                     android:layout_width="wrap_content"
@@ -63,6 +68,7 @@
  />
             </LinearLayout>
 
+            <!-- Host for all navigation fragments -->
             <FrameLayout
                 android:id="@+id/fragment_container"
                 android:layout_width="match_parent"
@@ -74,6 +80,7 @@
                 android:layout_height="1dp"
                 android:background="?attr/colorOutline" />
 
+            <!-- Tappable header to expand/collapse the log panel -->
             <TextView
                 android:id="@+id/log_toggle"
                 android:layout_width="match_parent"
@@ -88,6 +95,7 @@
                 android:clickable="true"
                 android:focusable="true" />
 
+            <!-- Collapsible scrollable log output panel -->
             <ScrollView
                 android:id="@+id/log_scroll"
                 android:layout_width="match_parent"
@@ -108,16 +116,19 @@
             </ScrollView>
         </LinearLayout>
     </eightbitlab.com.blurview.BlurTarget>
+    <!-- Nav drawer container: blurred glass overlay + navigation menu -->
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start">
+        <!-- Blurred background layer for the drawer glass effect -->
         <eightbitlab.com.blurview.BlurView
             android:id="@+id/blur_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#991E1E1E" />
 
+        <!-- Navigation menu drawn on top of blur layer -->
         <com.google.android.material.navigation.NavigationView
             android:id="@+id/nav_view"
             android:layout_width="wrap_content"

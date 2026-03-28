@@ -10,6 +10,7 @@
     android:background="?attr/colorSurfaceVariant"
     android:foreground="?attr/selectableItemBackground">
 
+    <!-- Collapse/expand chevron arrow -->
     <TextView
         android:id="@+id/txt_chevron"
         android:layout_width="wrap_content"
@@ -19,6 +20,7 @@
         android:textColor="?attr/colorPrimary"
         android:paddingEnd="8dp" />
 
+    <!-- Section title e.g. "FREQUENCIES" or "PRESETS" -->
     <TextView
         android:id="@+id/txt_section_title"
         android:layout_width="0dp"
@@ -30,6 +32,7 @@
         android:textAllCaps="true"
         android:letterSpacing="0.05" />
 
+    <!-- Item count badge (hidden by default) -->
     <TextView
         android:id="@+id/txt_item_count"
         android:layout_width="wrap_content"

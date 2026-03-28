@@ -1,6 +1,7 @@
 /*
  * PSA TEA Brute-Force — Native C for Android JNI
  * Port of psa.c BF1/BF2 from Flipper firmware
+ * Called from TeaBruteForce.kt, split across multiple threads for speed.
  */
 
 #include <jni.h>
@@ -11,7 +12,7 @@
 #define TEA_DELTA  0x9E3779B9U
 #define TEA_ROUNDS 32
 
-/* BF1 constants */
+/* BF1 constants fixed key schedule and counter search range */
 #define PSA_BF1_CONST_U4   0x0E0F5C41U
 #define PSA_BF1_CONST_U5   0x0F5C4123U
 #define PSA_BF1_START      0x23000000U
@@ -21,7 +22,7 @@ static const uint32_t PSA_BF1_KEY_SCHEDULE[4] = {
     0x4A434915U, 0xD6743C2BU, 0x1F29D308U, 0xE6B79A64U,
 };
 
-/* BF2 constants */
+/* BF2 constants key schedule XORed with counter, different search range */
 #define PSA_BF2_START 0xF3000000U
 #define PSA_BF2_END   0xF4000000U
 
@@ -29,7 +30,7 @@ static const uint32_t PSA_BF2_KEY_SCHEDULE[4] = {
     0x4039C240U, 0xEDA92CABU, 0x4306C02AU, 0x02192A04U,
 };
 
-/* CRC-16 lookup table (polynomial 0x8005, no reflection) */
+/* CRC-16 lookup table (polynomial 0x8005, no reflection) used by BF2 validation */
 static const uint16_t crc16_table[256] = {
     0x0000, 0x8005, 0x800F, 0x000A, 0x801B, 0x001E, 0x0014, 0x8011,
     0x8033, 0x0036, 0x003C, 0x8039, 0x0028, 0x802D, 0x8027, 0x0022,
@@ -65,6 +66,7 @@ static const uint16_t crc16_table[256] = {
     0x8213, 0x0216, 0x021C, 0x8219, 0x0208, 0x820D, 0x8207, 0x0202,
 };
 
+/* Standard TEA encrypt: 32 rounds of Feistel using DELTA schedule. */
 static inline void tea_encrypt(uint32_t* v0, uint32_t* v1, const uint32_t* key) {
     uint32_t a = *v0, b = *v1;
     uint32_t sum = 0;
@@ -79,6 +81,7 @@ static inline void tea_encrypt(uint32_t* v0, uint32_t* v1, const uint32_t* key) 
     *v1 = b;
 }
 
+/* Standard TEA decrypt: reverse of tea_encrypt, sum starts at DELTA*ROUNDS. */
 static inline void tea_decrypt(uint32_t* v0, uint32_t* v1, const uint32_t* key) {
     uint32_t a = *v0, b = *v1;
     uint32_t sum = TEA_DELTA * TEA_ROUNDS;
@@ -93,6 +96,7 @@ static inline void tea_decrypt(uint32_t* v0, uint32_t* v1, const uint32_t* key) 
     *v1 = b;
 }
 
+/* BF1 checksum: sum of all 7 bytes of the decrypted payload, low byte must match dec_v1[7]. */
 static inline uint8_t tea_crc(uint32_t v0, uint32_t v1) {
     uint32_t crc = ((v0 >> 24) & 0xFF) + ((v0 >> 16) & 0xFF) +
                    ((v0 >> 8) & 0xFF) + (v0 & 0xFF);
@@ -100,6 +104,7 @@ static inline uint8_t tea_crc(uint32_t v0, uint32_t v1) {
     return (uint8_t)(crc & 0xFF);
 }
 
+/* CRC-16 using precomputed table used by BF2 to validate decrypted payload. */
 static inline uint16_t crc16(const uint8_t* buf, int len) {
     uint16_t crc = 0;
     for (int i = 0; i < len; i++) {
@@ -108,7 +113,9 @@ static inline uint16_t crc16(const uint8_t* buf, int len) {
     return crc;
 }
 
-/*
+/* BfContext: shared state passed into each brute-force range worker.
+ * cancel: pointer to a flag set by Kotlin to abort early.
+ * keys_tested_arr: JNI int[1] updated with progress count every 64K iterations.
  * Result struct packed into a long:
  *   bits 63:    success (1) or not (0)
  *   bits 31..0: found counter value
@@ -122,11 +129,14 @@ typedef struct {
     jintArray keys_tested_arr;
 } BfContext;
 
+/* Write current progress count back to the Kotlin-visible keys_tested array. */
 static inline void bf_report_progress(BfContext* ctx, uint32_t count) {
     jint val = (jint)count;
     (*(ctx->env))->SetIntArrayRegion(ctx->env, ctx->keys_tested_arr, 0, 1, &val);
 }
 
+/* BF1 worker: derive a working key from counter using the BF1 key schedule,
+ * decrypt (w0,w1), validate counter embedded in plaintext and CRC byte. */
 static bool bf1_range(uint32_t w0, uint32_t w1,
                       uint32_t start, uint32_t end,
                       BfContext* ctx,
@@ -167,6 +177,8 @@ static bool bf1_range(uint32_t w0, uint32_t w1,
     return false;
 }
 
+/* BF2 worker: XOR counter into BF2 key schedule to get working key,
+ * decrypt (w0,w1), validate counter and CRC-16 over 6 payload bytes. */
 static bool bf2_range(uint32_t w0, uint32_t w1,
                       uint32_t start, uint32_t end,
                       BfContext* ctx,
